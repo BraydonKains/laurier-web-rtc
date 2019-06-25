@@ -1,0 +1,17 @@
+{
+    "defaultEnv": "dev",
+    "dev": {
+	"driver": "pg",
+	"user": {"ENV" : "DEV_USER"},
+	"password": {"ENV" : "DEV_PASSWORD"},
+	"database": {"ENV" : "DEV_DB"},
+	"host": "db"
+    },
+    "local": {
+	"driver": "pg",
+	"user": "",
+	"password": "",
+	"database":  "",
+	"host": "localhost"
+    }
+}

@@ -2,24 +2,36 @@ version: "3"
 
 services:
     client:
+        container_name: client
         build: ./client
         expose: 
             - 3000
         env_file:
-            - ./client/.env
+            - ./client/client.dev.env
         ports:
             - "3000:3000"
         volumes:
             - ./client:/app
         command: npm start
     server:
+        container_name: server
         build: ./server
         expose: 
             - 4000
         env_file:
-            - ./server/.env
+            - ./server/server.dev.env
         ports:
             - "4000:4000"
         volumes:
             - ./server:/api
         command: npm start
+    db:
+        container_name: db
+        image: postgres:12
+        restart: always
+        expose:
+            - 5432
+        ports:
+            - "5432:5432"
+        env_file:
+            - db.dev.env
