@@ -17,7 +17,7 @@ class User {
 			this.plain_pass = null;
 		    }
 		})
-		.catch(e => throw e);
+		.catch(e => console.log(e));
 	} else {
 	    this.id = null;
 	    this.username = null;

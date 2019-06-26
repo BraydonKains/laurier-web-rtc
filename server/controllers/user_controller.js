@@ -24,7 +24,7 @@ function create(_user) {
     let u = new User();
     u.username = _user.username;
     // TO DO: Hash the password
-    u.password = _user.password;
+    u.plain_pass = _user.password;
     u.email = _user.email;
     u.commit();
 }

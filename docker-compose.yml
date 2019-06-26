@@ -21,7 +21,7 @@ services:
         env_file:
             - ./server/server.dev.env
         ports:
-            - "4000:4000"
+            - "4000:3000"
         volumes:
             - ./server:/api
         command: npm start
@@ -29,6 +29,8 @@ services:
         container_name: db
         image: postgres:12
         restart: always
+        volumes:
+            - ./tmp/db:/var/lib/postgresql/data
         expose:
             - 5432
         ports:

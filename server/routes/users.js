@@ -12,7 +12,8 @@ router.use(
 
 /* GET users listing. */
 router.get('/users', function(req, res, next) {
-    controller.get();
+    let u = controller.index();
+    res.send(u);
 });
 
 /* GET user by id */
