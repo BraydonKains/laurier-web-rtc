@@ -1,4 +1,24 @@
-.App {
+/**{
+  margin:0;
+  padding:0;
+}*/
+html{
+  height:100%;
+}
+body {
+  margin: 0;
+  height:100%;
+  /*font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;*/
+  background-color: #dad7cd;
+
+}
+
+
+/*.App {
   text-align: center;
 }
 
@@ -21,13 +41,114 @@
 
 .App-link {
   color: #61dafb;
+}*/
+.bg-deep-green{
+  background-color: #344e41;
+}
+.bg-dark-green{
+  background-color: #3a5a40;
+}
+.bg-medium-green{
+  background-color: #588157;
+}
+.bg-light-green{
+  background-color: #a3b18a;
+}
+.bg-green-beige{
+  background-color: #dad7cd;
+}
+.w-90{
+  width:90%;
 }
 
-@keyframes App-logo-spin {
+.headerTop{
+  height:4em;
+  width:100%;
+  background-color: rgba(58,90,64,0.5);
+  padding:2%;
+}
+.headerMiddle{
+  height:0.5em;
+  width:100%
+}
+.headerBottom{
+  height: 2.5em;
+  width:100%;
+  background-color: rgba(163,177,138,0.65);
+}
+.contentBack{
+  background:#FFFFFF;
+  width:90%;
+
+}
+.sendButton{
+  /*position: absolute;
+  bottom:10px;
+  right:0;*/
+  height:10%;
+  width:10%;
+  background-color: #588157;
+  border:none;
+  color: #FFFFFF;
+}
+.messageInput{
+  height:10%;
+}
+.messageDisplay{
+  height:90%;
+}
+.TextMessageChat{
+  background-color: #E9E9E9;
+  border: 1px solid #344E41;
+  padding:2%;
+}
+.startButton{
+  background-color: rgba(17,216,13,0.75);
+  border: 3px solid rgba(17, 223, 41, 0.75);
+  color: white;
+  width:35%;
+  padding:1% 0 1% 0;
+}
+.stopButton{
+  background-color: rgba(255,0,0,0.75);
+  border: 3px solid rgba(255, 0, 0, 0.75);
+  color:white;
+  width:35%;
+  padding:1% 0 1% 0;
+}
+.addButton{
+  background-color: rgba(5,0,255,0.75);
+  border:3px solid rgba(30, 63, 226, 0.75);
+  color:white;
+  padding:2% 4% 2% 4%;
+  
+}
+.directoryOption{
+  line-height: 2.25em;
+  color: black;
+  text-decoration: none;
+}
+a:hover{
+  text-decoration: none;
+  color: black;
+}
+.signOutLink{
+  line-height:3em;
+}
+
+#titleText{
+  margin: 0;
+  position: absolute;
+  top: 1em;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+/*@keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
   }
-}
+}*/
