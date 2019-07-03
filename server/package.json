@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "start:dev": "webpack-dev-server"
+    "live": "nodemon ./app.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -15,6 +15,7 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
+    "nodemon": "^1.19.1",
     "pg": "^7.11.0"
   },
   "devDependencies": {
