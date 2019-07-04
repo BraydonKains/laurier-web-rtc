@@ -3,36 +3,36 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var controller = require("../controllers/user_controller.js");
 
-router.use(bodyParser.json());
 router.use(
     bodyParser.urlencoded({
 	extended: true,
     })
 );
-
+router.use(bodyParser.json());
 /* GET users listing. */
-router.get('/users', function(req, res, next) {
+router.get('/', function(req, res, next) {
     let u = controller.index();
     res.send(u);
 });
 
 /* GET user by id */
-router.get("/users/:id", function(req, res, next) {
+router.get("/:id", function(req, res, next) {
     controller.show(req.params.id);
 });
 
 /* POST to create user */
-router.post("/users/create", function(req, res, next) {
-    controller.create(req.body);
+router.post("/create", function(req, res, next) {
+    var user = req.body.username;
+    res.send(user);
 });
 
 /* PATCH to update user */
-router.patch("/users/update", function(req, res, next) {
+router.patch("/update", function(req, res, next) {
     controller.update(req.body);
 });
 
 /* POST to delete user */
-router.post("/users/create", function(req, res, next) {
+router.post("/create", function(req, res, next) {
     controller.destroy(req.body);
 });
 

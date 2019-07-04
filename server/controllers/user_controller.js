@@ -1,6 +1,6 @@
-var User = require("../models/user.js");
-
-function index() {
+const User = require("../models/user.js");
+const pool = require("../pool.js");
+exports.index = function() {
     // SELECT * FROM users
     let u_arr = [];
     pool.query("INSERT INTO users VALUES username = $1, email = $2, password = $3", [this.username, this.email, this.plain_pass])
@@ -14,29 +14,31 @@ function index() {
 	    }
 	})
 	.catch(e => success = false); 
+    return u_arr;
 }
 
-function show(_id) {
+exports.show = function(_id) {
     return new User(_id);
 }
 
-function create(_user) {
+exports.create = function(_user) {
     let u = new User();
     u.username = _user.username;
     // TO DO: Hash the password
     u.plain_pass = _user.password;
     u.email = _user.email;
-    u.commit();
+    let result = u.commit();
+    return _user;
 }
 
-function update(_user) {
+exports.update = function(_user) {
     let u = new User(_user.id);
     u.username = _user.username;
     u.email = _user.email;
     u.commit();
 }
 
-function destroy(_id) {
+exports.destroy = function(_id) {
     let u = new User(_id);
     u.destroy();
 }

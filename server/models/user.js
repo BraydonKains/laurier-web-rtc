@@ -27,19 +27,19 @@ class User {
     }
 
     commit() {
-	var success = false;
-	if(id) {
+	var success = "cheese curds";
+	if(this.id != null) {
 	    pool.query("UPDATE users username = $2, email = $3 WHERE id = $1", [this.id, this.username, this.email])
 	    .then(res => {
 		success = true;
 	    })
-	    .catch(e => success = false); 
+	    .catch(e => success = e); 
 	} else {
-	    pool.query("INSERT INTO users VALUES username = $1, email = $2, password = $3", [this.username, this.email, this.plain_pass])
+	    pool.query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)", [this.username, this.email, this.plain_pass])
 	    .then(res => {
-		success = true;
+		success = "aaahhh";
 	    })
-	    .catch(e => success = false); 
+	    .catch(e => success = "aaaahhhh"); 
 	}
 	return success;
     }
