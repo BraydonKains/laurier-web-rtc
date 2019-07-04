@@ -11,4 +11,4 @@ ENV PATH "$PATH:/api/node_modules/db-migrate/bin/db-migrate"
 
 EXPOSE 3000
 
-CMD ["npm","run", "live"]
+CMD ["npm", "start"]

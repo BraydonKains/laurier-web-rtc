@@ -1,57 +1,57 @@
 const pool = require("../pool.js");
 
 class User {
-    constructor(id = 0) {
-	if(id > 0) { 
-	    pool.query('SELECT * FROM users WHERE id = $1', [_id])
-		.then(res => {
-		    if(res.rows.length > 0) {
-			this.id = res.row[0].id;
-			this.username = res.row[0].username;
-			this.email = res.row[0].email;
-			this.plain_pass = null;
-		    } else {
-			this.id = null;
-			this.username = null;
-			this.email = null;
-			this.plain_pass = null;
-		    }
-		})
-		.catch(e => console.log(e));
-	} else {
-	    this.id = null;
-	    this.username = null;
-	    this.email = null;
-	    this.plain_pass = null;
+    constructor() {
+	this.id = null;
+	this.username = null;
+	this.email = null;
+	this.plain_pass = null;
+    }
+
+    async retrieve(id) {
+	try {
+	    const res = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+
+	    if(res.rows.length > 0) {
+		this.id = res.rows[0].id;
+		this.username = res.rows[0].username;
+		this.email = res.rows[0].email;
+		this.plain_pass = null;
+	    }
+	} catch(err) {
+	    console.log(err);
 	}
     }
 
-    commit() {
-	var success = "cheese curds";
+    async commit() {
+	var success = false;
 	if(this.id != null) {
-	    pool.query("UPDATE users username = $2, email = $3 WHERE id = $1", [this.id, this.username, this.email])
-	    .then(res => {
-		success = true;
-	    })
-	    .catch(e => success = e); 
+	    try {
+		const res = await pool.query("UPDATE users SET username = $2, email = $3 WHERE id = $1", [this.id, this.username, this.email]);
+		success = "updated";
+	    } catch(err) {
+		console.log(err);
+	    }
 	} else {
-	    pool.query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)", [this.username, this.email, this.plain_pass])
-	    .then(res => {
-		success = "aaahhh";
-	    })
-	    .catch(e => success = "aaaahhhh"); 
+	    try {
+		const res = await pool.query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)", [this.username, this.email, this.plain_pass])
+		success = "created";
+	    } catch(err) {
+		console.log(err);
+	    }
 	}
 	return success;
     }
 
-    destroy() {
-	var success = true;
+    async destroy() {
+	var success = false;
 	if(this.id) {
-	    pool.query("DELETE FROM users WHERE id = $1", [this.id])
-		.then(res => {
-		    success = true;
-		})
-		.catch(e => success = false); 
+	    try {
+		const res = await pool.query("DELETE FROM users WHERE id = $1", [this.id]);
+		success = true;
+	    } catch(err) {
+		console.log(err);
+	    }
 	}
 	return success;
     }
