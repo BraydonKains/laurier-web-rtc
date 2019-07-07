@@ -2,6 +2,9 @@
   margin:0;
   padding:0;
 }*/
+*:focus{
+  outline:none;
+}
 html{
   height:100%;
 }
@@ -15,6 +18,9 @@ body {
   -moz-osx-font-smoothing: grayscale;*/
   background-color: #dad7cd;
 
+}
+button:focus{
+  outline:none;
 }
 
 
@@ -126,9 +132,11 @@ body {
   
 }
 .directoryOption{
-  line-height: 2.25em;
+  line-height: 150%;
   color: black;
   text-decoration: none;
+  background: none;
+  border:none;
 }
 .submitButton{
   border:none;
@@ -145,9 +153,14 @@ a:hover{
   text-decoration: none;
   color: black;
 }
-.signOutLink{
-  line-height:3em;
+.signOutLink, .signOutLink:hover, .signOutLink:focus{
+  line-height:2em;
+  text-decoration: none;
+  border:none;
+  outline:none;
+  background: none;
 }
+
 
 #titleText{
   margin: 0;

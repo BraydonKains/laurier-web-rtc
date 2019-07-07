@@ -26,14 +26,14 @@ function App() {
     <div className="App">
       <div className="headerTop">
           <h1 id="titleText">NAME HERE</h1>
-          <p className="text-white float-right signOutLink">Sign Out</p>
+          <button className="btn text-white float-right signOutLink">Sign Out</button>
       </div>
       <div className="headerMiddle">
 
       </div>
       <div className="headerBottom">
           <div className="w-75 mx-auto">
-          <a href="#" className="float-right directoryOption text-dark">Home</a>
+          <button href="#" className="btn float-right directoryOption text-dark">Home</button>
           </div>
       </div>
       <div className="contentBack mx-auto mb-3">

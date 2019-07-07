@@ -29,7 +29,7 @@ class RegisterForm extends React.Component{
     registerSubmit(event){
         var inputCorrect = true;
         /*Changes name textbox border to red if name textbox is empty, and grey otherwise*/
-        if(this.state.nameVal == ""){
+        if(this.state.nameVal === ""){
             this.setState({nameDisplay:"w-75 px-2 mb-2 incorrectNameEmail"});
             inputCorrect=false;
         }
@@ -38,15 +38,15 @@ class RegisterForm extends React.Component{
         }
         /*Changes email textbox border to red if name textbox is empty or not email, and grey otherwise*/
         var emailTest = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if(this.state.emailVal == "" || !emailTest.test(this.state.emailVal)){
+        if(this.state.emailVal === "" || !emailTest.test(this.state.emailVal)){
             this.setState({emailDisplay:"w-75 px-2 mb-2 incorrectNameEmail"});
             inputCorrect = false;
         }
         else{
             this.setState({emailDisplay:"w-75 px-2 mb-2 correctNameEmail"});
         }
-        /*informs user if password is less than 6 or more than 12 characters in length*/
-        if(this.state.passwordVal.length < 6 || this.state.passwordVerVal > 12){
+        /*informs user if password is less than 6 or more than 20 characters in length*/
+        if(this.state.passwordVal.length < 6 || this.state.passwordVerVal > 20){
             this.setState({lengthClass:"text-danger"});
             inputCorrect = false;
         }
@@ -62,7 +62,7 @@ class RegisterForm extends React.Component{
             this.setState({numPresentClass:"text-success"});
         }
         /*informs user if password and password verfied are not the same*/
-        if(this.state.passwordVal != this.state.passwordVerVal){
+        if(this.state.passwordVal !== this.state.passwordVerVal){
             this.setState({samePassesClass:"text-danger"});
             inputCorrect = false;
         }
@@ -115,7 +115,7 @@ class RegisterForm extends React.Component{
                             <div className={this.state.passwordInfoVis}>
                                 <p className="w-25 mb-1">Password must:</p>
                                 <ul>
-                                    <li className={this.state.lengthClass}>be 6-12 characters long</li>
+                                    <li className={this.state.lengthClass}>be 6-20 characters long</li>
                                     <li className={this.state.numPresentClass}>have atleast one number</li>
                                     <li className={this.state.samePassesClass}>Password and repeated password must be the same</li>
                                 </ul>
