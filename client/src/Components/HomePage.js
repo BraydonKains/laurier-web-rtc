@@ -16,7 +16,7 @@ class HomePage extends React.Component {
                     Username: <input></input>
                 </div>
                 <div className="login mb-3">
-                    Password: <input></input>
+                    Password: <input className="ml-5"></input>
                 </div>
                 <div className="login mb-3">
                     <button className="btn" onClick={() => this.props.changePage(4)}>Log In</button>

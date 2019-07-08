@@ -29,13 +29,12 @@
 }
 
 .navitembtn {
-    padding: 0;
     border: none;
-    background: none;
-    background-color: rgba(163, 177, 138, 0.75);
+    background-color: rgba(163, 177, 138, 0);
     color: rgba(0, 0, 0, 0.7);
     font-size: 20px;
-    margin-right: 20px;
+    margin-right: 10px;
+    font-weight: 500;
 }
 
 .login {
