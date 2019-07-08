@@ -21,7 +21,7 @@ class HomePage extends React.Component {
                 <div className="login mb-3">
                     <button className="btn" onClick={() => this.props.changePage(4)}>Log In</button>
                 </div>
-                <div className="text">Not a member yet? Sign up <a href='#'>here</a></div>
+                <div className="text">Not a member yet? Sign up <a href="#">here</a></div>
             </div>
             </div>
         </div>

@@ -36,6 +36,7 @@ class App extends React.Component{
     this.setState({
       current : id
     });
+    console.log(this.state.current);
   };
 
   homepagehtml() {
@@ -59,14 +60,14 @@ class App extends React.Component{
       <div className="App">
         <div className="headerTop">
             <h1 id="titleText">NAME HERE</h1>
-            <button className="btn text-white float-right signOutLink">Sign Out</button>
+            <button className="btn text-white float-right signOutLink" onClick={() =>(this.changePage(1))}>Sign Out</button>
         </div>
         <div className="headerMiddle">
   
         </div>
         <div className="headerBottom">
             <div className="w-75 mx-auto">
-            <button href="#" className="btn float-right directoryOption text-dark">Home</button>
+            <button href="#" className="btn float-right directoryOption text-dark" onClick={() =>(this.changePage(1))}>Home</button>
             </div>
         </div>
         <div className="contentBack mx-auto mb-3">

@@ -4,11 +4,10 @@ import '../style.css';
 class NavBar extends React.Component {
 
     renderItems() {
-        console.log(this.props.page);
 
         return this.props.page.map((p) => (
-            <li className="nav-item" id="navitem">
-                <button onClick={() => this.props.changePage(p.id)}>{p.title}</button>
+            <li className="nav-item">
+                <button className="border-0 navitembtn" onClick={() => this.props.changePage(p.id)}>{p.title}</button>
             </li>
         ));
     }
