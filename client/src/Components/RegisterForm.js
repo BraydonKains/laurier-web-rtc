@@ -1,4 +1,5 @@
 import React from 'react';
+import NavBar from './NavBar';
 class RegisterForm extends React.Component{
     constructor(props){
         super(props);
@@ -85,65 +86,69 @@ class RegisterForm extends React.Component{
     }
     render(){
         return(
-            <div className="RegisterForm p-4">
-                <h2>Sign Up</h2>
-                <hr className="bg-dark"></hr>
-                <div className="w-90 mx-auto">
-                    <form>
-                        <table className="w-50">
-                            <tbody>
-                                <tr>
-                                    <td><h6 className="m-0">Name:</h6></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="text" className={this.state.nameDisplay} placeholder="John Doe" onChange={this.handleNameChange}></input>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><h6 className="m-0">Email</h6></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input type="text" className={this.state.emailDisplay} placeholder="johndoe@example.com" onChange={this.handleEmailChange}></input>    
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <hr></hr>
-                        <div>
-                            <div className={this.state.passwordInfoVis}>
-                                <p className="w-25 mb-1">Password must:</p>
-                                <ul>
-                                    <li className={this.state.lengthClass}>be 6-20 characters long</li>
-                                    <li className={this.state.numPresentClass}>have atleast one number</li>
-                                    <li className={this.state.samePassesClass}>Password and repeated password must be the same</li>
-                                </ul>
-                            </div>
+            <div className="RegisterForm">
+                <h1 className='jumbotron pageName mt-0 mb-4'>Laurier Web-RTC</h1>
+                <NavBar page={this.props.page} changePage={this.props.changePage} />
+                <div className="contentBack mx-auto mb-4 p-4">
+                    <h2>Sign Up</h2>
+                    <hr className="bg-dark"></hr>
+                    <div className="w-90 mx-auto">
+                        <form>
                             <table className="w-50">
                                 <tbody>
                                     <tr>
-                                        <td><h6 className="m-0">Password:</h6></td>
+                                        <td><h6 className="m-0">Name:</h6></td>
                                     </tr>
                                     <tr>
-                                        <td><input type="password" className="w-75 px-2 mb-2" onChange={this.handlePasswordChange}></input></td>
+                                        <td>
+                                            <input type="text" className={this.state.nameDisplay} placeholder="John Doe" onChange={this.handleNameChange}></input>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td><h6 className="m-0">Repeat Password:</h6></td>
+                                        <td><h6 className="m-0">Email</h6></td>
                                     </tr>
                                     <tr>
-                                        <td><input type="password" className="w-75 px-2 mb-2" onChange={this.handlePasswordVerChange}></input></td>
+                                        <td>
+                                            <input type="text" className={this.state.emailDisplay} placeholder="johndoe@example.com" onChange={this.handleEmailChange}></input>    
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
                             <hr></hr>
-                        </div>
-                        <div>
-                            <button className="bg-medium-green submitButton rounded float-right" onClick={this.registerSubmit}>Submit</button>
-                            <p className="invisible">Hidden</p>
-                        </div>
-                        
-                    </form>
+                            <div>
+                                <div className={this.state.passwordInfoVis}>
+                                    <p className="w-25 mb-1">Password must:</p>
+                                    <ul>
+                                        <li className={this.state.lengthClass}>be 6-20 characters long</li>
+                                        <li className={this.state.numPresentClass}>have atleast one number</li>
+                                        <li className={this.state.samePassesClass}>Password and repeated password must be the same</li>
+                                    </ul>
+                                </div>
+                                <table className="w-50">
+                                    <tbody>
+                                        <tr>
+                                            <td><h6 className="m-0">Password:</h6></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="password" className="w-75 px-2 mb-2" onChange={this.handlePasswordChange}></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td><h6 className="m-0">Repeat Password:</h6></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="password" className="w-75 px-2 mb-2" onChange={this.handlePasswordVerChange}></input></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr></hr>
+                            </div>
+                            <div>
+                                <button className="bg-medium-green submitButton rounded float-right" onClick={this.registerSubmit}>Submit</button>
+                                <p className="invisible">Hidden</p>
+                            </div>
+                            
+                        </form>
+                    </div>
                 </div>
             </div>
         );

@@ -21,6 +21,7 @@ class TextMessageChat extends React.Component{
     enterPressed(event) {
         var code = event.keyCode || event.which;
         if(code === 13) { //13 is the enter keycode
+            event.preventDefault();
             this.handleSend();
             this.setState({textVal:''});
         } 
@@ -36,7 +37,7 @@ class TextMessageChat extends React.Component{
             );
           });
         return(
-            <div className="TextMessageChat w-100 h-100">
+            <div className="TextMessageChat h-100">
                 
                 <div className="messageDisplay mb-2">
                     <ul>
