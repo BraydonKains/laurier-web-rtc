@@ -1,0 +1,66 @@
+.inside {
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    width: 900px;
+    min-height: 900px;
+    margin: 0 auto;
+    background-color: white;
+}
+
+.centerwhite {
+    background-color: white;
+    min-height: 700px;
+    padding-top: 200px;
+    padding-left: 200px;
+}
+
+.background {
+    background-color: rgba(218, 215, 205, 0.5);
+    min-height: 900px;
+}
+
+.pageName {
+    background-color: rgba(58, 90, 64, 0.5);
+}
+
+#navbar {
+    background-color: rgba(163, 177, 138, 0.75);
+    color: rgba(0, 0, 0, 0.7);
+    padding-right: 50px;
+}
+
+.navitembtn {
+    border: none;
+    background-color: rgba(163, 177, 138, 0);
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 20px;
+    margin-right: 10px;
+    font-weight: 500;
+}
+
+.login {
+    margin: 0 auto;
+    float: none;
+}
+
+input {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.85);
+    box-sizing: border-box;
+    border-radius: 5px;
+    width: 527px;
+    margin-left: 25px;
+}
+
+.btn {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    color: #FFFFFF;
+    background-color: #588157;
+    margin-left: 300px;
+}
+
+.text {
+    margin-left: 250px;
+}

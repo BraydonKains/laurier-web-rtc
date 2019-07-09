@@ -3,7 +3,7 @@ class ButtonPanel extends React.Component{
     render(){
         return(
             <div className="ButtonPanel">
-                <div className="container">
+                <div className="container w-100">
                     <div className="row">
                         <div className="col pl-2">
                             <button className="addButton rounded">+</button>

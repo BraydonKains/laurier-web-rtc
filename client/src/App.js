@@ -3,45 +3,78 @@ import logo from './logo.svg';
 import './App.css';
 import TwoPersonChatStation from './Components/TwoPersonChatStation';
 import RegisterForm from './Components/RegisterForm';
+import HomePage from './Components/HomePage'
 
 
-function App() {
-  return (
-    /*<div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>*/
-    <div className="App">
-      <div className="headerTop">
-          <h1 id="titleText">NAME HERE</h1>
-          <button className="btn text-white float-right signOutLink">Sign Out</button>
-      </div>
-      <div className="headerMiddle">
 
-      </div>
-      <div className="headerBottom">
-          <div className="w-75 mx-auto">
-          <button href="#" className="btn float-right directoryOption text-dark">Home</button>
-          </div>
-      </div>
-      <div className="contentBack mx-auto mb-3">
-          <RegisterForm/>
+class App extends React.Component{
 
+  state = {
+
+    current : 1,
+    page : [
+      {
+        id : 1,
+        title : "Home"
+      },
+      {
+        id : 2,
+        title : "Sign Up"
+      },
+      {
+        id : 3,
+        title : "Login"
+      },
+      {
+        id : 4,
+        title : "Two Person Chat"
+      }
+    ]
+  }
+
+  changePage = (id) => {
+    this.setState({
+      current : id
+    });
+    console.log(this.state.current);
+  };
+
+  homepagehtml() {
+    return (
+      <div>
+        <HomePage page={this.state.page} changePage={this.changePage}/>
       </div>
-    </div>
-  );
+    );
+  }
+
+  chat() {
+    return (
+      <div>
+        <TwoPersonChatStation page={this.state.page} changePage={this.changePage}/>
+      </div>
+    );
+  }
+
+  registrationpagehtml() {
+    return (
+        <div>
+          <RegisterForm page={this.state.page} changePage={this.changePage}/>
+      </div>
+    );
+  }
+
+  render() {
+      if ((this.state.current == 1) || (this.state.current == 3)) {
+        return this.homepagehtml();
+      }
+      else if (this.state.current == 2){
+        return this.registrationpagehtml();
+      }
+      else {
+        return this.chat();
+      }
+  }
+  
 }
 
 export default App;

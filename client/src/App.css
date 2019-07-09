@@ -102,8 +102,9 @@ button:focus{
   height:10%;
 }
 .messageDisplay{
-  height:90%;
   overflow-y: scroll;
+  display: block;
+  height: 23em;
 }
 .TextMessageChat{
   background-color: #E9E9E9;
