@@ -1,5 +1,4 @@
 import React from 'react';
-import NavBar from './NavBar';
 class RegisterForm extends React.Component{
     constructor(props){
         super(props);
@@ -87,8 +86,6 @@ class RegisterForm extends React.Component{
     render(){
         return(
             <div className="RegisterForm">
-                <h1 className='jumbotron pageName mt-0 mb-4'>Laurier Web-RTC</h1>
-                <NavBar page={this.props.page} changePage={this.props.changePage} />
                 <div className="contentBack mx-auto mb-4 p-4">
                     <h2>Sign Up</h2>
                     <hr className="bg-dark"></hr>
