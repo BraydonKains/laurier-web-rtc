@@ -20,7 +20,7 @@ router.get("/:id", async function(req, res, next) {
 router.post("/create", async function(req, res, next) {
     let user = req.body;
     let result = await controller.create(user);
-    res.send(result);
+    res.send(JSON.stringify(result));
 });
 
 /* PATCH to update user */

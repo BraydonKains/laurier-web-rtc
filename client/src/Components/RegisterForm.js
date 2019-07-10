@@ -28,6 +28,7 @@ class RegisterForm extends React.Component{
     }
     /*Checks input values and creates user if all inputis correct*/
     registerSubmit(event){
+	event.preventDefault();
         var inputCorrect = true;
         /*Changes name textbox border to red if name textbox is empty, and grey otherwise*/
         if(this.state.nameVal === ""){
@@ -67,33 +68,33 @@ class RegisterForm extends React.Component{
             this.setState({samePassesClass:"text-danger"});
             inputCorrect = false;
         }
-        else{
+        else {
             this.setState({samePassesClass:"text-success"});
         }
         /*if anything wrong inform user, or input user in DB otherwise*/
 	console.log("this is me " + inputCorrect);
         if(inputCorrect){
 	    console.log("hi");
-            this.setState({passwordInfoVis:"float-right invisible"});
+	    this.setState({passwordInfoVis:"float-right invisible"});
 	    let data = {
-		"username": this.state.nameVal,
-		"password": this.state.passwordVal,
-		"email": this.state.emailVal
+		username: this.state.nameVal,
+		password: this.state.passwordVal,
+		email: this.state.emailVal
 	    };
-	    console.log("anything?");
-	    fetch("localhost:4000/users/create", {
-		    method: "POST",
-		    mode: "cors",
-		    cache: "no-cache",
-		    headers: {
-			'Content-Type': 'application/json',
-		    },
-		    body: JSON.stringify(data) 
-		})
-		.then(res => res.json())
-		.catch(err => {
-		    console.log(err);
-		});
+	    console.log("boo");
+	    fetch("http://localhost:4000/users/create", {
+		method: "POST",
+		mode: "cors",
+		cache: "no-cache",
+		headers: {
+		    'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data) 
+	    })
+	    .then(res => res)
+	    .catch(err => {
+		console.log(err);
+	    });
         }
         else{
             this.setState({passwordInfoVis:"float-right visible"});

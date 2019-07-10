@@ -62,3 +62,6 @@ typings/
 
 # tmp folder with local database data
 /tmp
+
+# swap files
+.swp
