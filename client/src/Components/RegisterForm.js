@@ -28,7 +28,8 @@ class RegisterForm extends React.Component{
     }
     /*Checks input values and creates user if all inputis correct*/
     registerSubmit(event){
-        var inputCorrect = true;
+	event.preventDefault();
+        let inputCorrect = true;
         /*Changes name textbox border to red if name textbox is empty, and grey otherwise*/
         if(this.state.nameVal === ""){
             this.setState({nameDisplay:"w-75 px-2 mb-2 incorrectNameEmail"});
@@ -38,7 +39,7 @@ class RegisterForm extends React.Component{
             this.setState({nameDisplay:"w-75 px-2 mb-2 correctNameEmail"});
         }
         /*Changes email textbox border to red if name textbox is empty or not email, and grey otherwise*/
-        var emailTest = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let emailTest = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if(this.state.emailVal === "" || !emailTest.test(this.state.emailVal)){
             this.setState({emailDisplay:"w-75 px-2 mb-2 incorrectNameEmail"});
             inputCorrect = false;
@@ -71,16 +72,17 @@ class RegisterForm extends React.Component{
             this.setState({samePassesClass:"text-success"});
         }
         /*if anything wrong inform user, or input user in DB otherwise*/
-	console.log("this is me " + inputCorrect);
+	
         if(inputCorrect){
-	    console.log("hi");
+	    
             this.setState({passwordInfoVis:"float-right invisible"});
 	    let data = {
 		"username": this.state.nameVal,
 		"password": this.state.passwordVal,
 		"email": this.state.emailVal
 	    };
-	    console.log("anything?");
+		
+	   
 	    fetch("localhost:4000/users/create", {
 		    method: "POST",
 		    mode: "cors",
@@ -97,7 +99,6 @@ class RegisterForm extends React.Component{
         }
         else{
             this.setState({passwordInfoVis:"float-right visible"});
-            event.preventDefault();
             
         }
         
