@@ -71,11 +71,29 @@ class RegisterForm extends React.Component{
             this.setState({samePassesClass:"text-success"});
         }
         /*if anything wrong inform user, or input user in DB otherwise*/
+	console.log("this is me " + inputCorrect);
         if(inputCorrect){
+	    console.log("hi");
             this.setState({passwordInfoVis:"float-right invisible"});
-            /*
-            -try to insert user into DB
-            */
+	    let data = {
+		"username": this.state.nameVal,
+		"password": this.state.passwordVal,
+		"email": this.state.emailVal
+	    };
+	    console.log("anything?");
+	    fetch("localhost:4000/users/create", {
+		    method: "POST",
+		    mode: "cors",
+		    cache: "no-cache",
+		    headers: {
+			'Content-Type': 'application/json',
+		    },
+		    body: JSON.stringify(data) 
+		})
+		.then(res => res.json())
+		.catch(err => {
+		    console.log(err);
+		});
         }
         else{
             this.setState({passwordInfoVis:"float-right visible"});

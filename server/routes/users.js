@@ -2,13 +2,7 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var controller = require("../controllers/user_controller.js");
-
-router.use(
-    bodyParser.urlencoded({
-	extended: true,
-    })
-);
-router.use(bodyParser.json());
+var passport = require('passport');
 
 /* GET users listing. */
 router.get('/', async function(req, res, next) {
@@ -24,7 +18,8 @@ router.get("/:id", async function(req, res, next) {
 
 /* POST to create user */
 router.post("/create", async function(req, res, next) {
-    let result = await controller.create(req.body);
+    let user = req.body;
+    let result = await controller.create(user);
     res.send(result);
 });
 
@@ -39,6 +34,10 @@ router.patch("/update", async function(req, res, next) {
 router.post("/delete/:id", async function(req, res, next) {
     let result = await controller.destroy(req.params.id);
     res.send(result);
+});
+
+router.post("/login", passport.authenticate('local'), function(req, res) {
+    res.sendStatus(200);
 });
 
 module.exports = router;
