@@ -6,12 +6,12 @@ class TwoVideoChat extends React.Component{
                 <div className="container w-100">
                     <div className="row">
                         <div className="col">
-                            <video className="">Your Video</video>
+                            <video className="" id="userVideo">Your Video</video>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col">
-                            <video className="">Other Person Video</video>
+                            <video className="" id="chatVideo">Other Person Video</video>
                         </div>
                     </div>
                 </div>
