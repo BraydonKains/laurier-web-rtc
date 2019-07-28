@@ -7,6 +7,13 @@
 	"database": {"ENV" : "DEV_DB"},
 	"host": "db"
     },
+    "prod": {
+	"driver": "pg",
+	"user": {"ENV" : "USER"},
+	"password": {"ENV" : "PASSWORD"},
+	"database": {"ENV" : "DB"},
+	"host": "db"
+    },
     "local": {
 	"driver": "pg",
 	"user": "",
