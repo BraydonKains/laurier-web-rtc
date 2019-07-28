@@ -16,10 +16,26 @@ class User {
 		this.id = res.rows[0].id;
 		this.username = res.rows[0].username;
 		this.email = res.rows[0].email;
-		this.plain_pass = null;
+		this.password = res.rows[0].password;
 	    }
 	} catch(err) {
 	    console.log(err);
+	}
+    }
+
+    async retrieve_name(name) {
+	try {
+	    const res = await pool.query("SELECT * FROM users WHERE username = $1", [name]);
+
+	    if(res.rows.length > 0) {
+		this.id = res.rows[0].id;
+		this.username = res.rows[0].username;
+		this.email = res.rows[0].email;
+		this.password = res.rows[0].password;
+	    }
+	} catch(err) {
+	    console.log(err);
+	    return false;
 	}
     }
 
@@ -34,7 +50,7 @@ class User {
 	    }
 	} else {
 	    try {
-		const res = await pool.query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)", [this.username, this.email, this.plain_pass])
+		const res = await pool.query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)", [this.username, this.email, this.password])
 		success = "created";
 	    } catch(err) {
 		console.log(err);
@@ -55,6 +71,7 @@ class User {
 	}
 	return success;
     }
+
 }
 
 module.exports = User;
