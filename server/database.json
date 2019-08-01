@@ -2,9 +2,9 @@
     "defaultEnv": "dev",
     "dev": {
 	"driver": "pg",
-	"user": {"ENV" : "DEV_USER"},
-	"password": {"ENV" : "DEV_PASSWORD"},
-	"database": {"ENV" : "DEV_DB"},
+	"user": {"ENV" : "USER"},
+	"password": {"ENV" : "PASSWORD"},
+	"database": {"ENV" : "DB"},
 	"host": "db"
     },
     "prod": {

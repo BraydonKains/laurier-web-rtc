@@ -71,17 +71,15 @@ class RegisterForm extends React.Component{
             this.setState({samePassesClass:"text-success"});
         }
         /*if anything wrong inform user, or input user in DB otherwise*/
-	console.log("this is me " + inputCorrect);
         if(inputCorrect){
-	    console.log("hi");
+	    console.log(process.env.REACT_APP_API_URI);
 	    this.setState({passwordInfoVis:"float-right invisible"});
 	    let data = {
 		username: this.state.nameVal,
 		password: this.state.passwordVal,
 		email: this.state.emailVal
 	    };
-	    console.log("boo");
-	    fetch("http://localhost:4000/users/create", {
+	    fetch(process.env.REACT_APP_API_URI + "users/create", {
 		method: "POST",
 		mode: "cors",
 		cache: "no-cache",
