@@ -14,22 +14,24 @@ class TwoPersonChatStation extends React.Component{
         return(
             <div class="background">
                 <NavBar menu={this.state.menu} />
-                <div className="TwoPersonChatStation">
-                    <div className="contentBack mx-auto mb-4 p-2">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-4">
-                                    <TwoVideoChat/>
-                                    <ButtonPanel/>
+                <div className='centerwhite px-3 pt-0 container'>
+                    <div className="TwoPersonChatStation">
+                        <div className="contentBack mx-auto mb-4 p-2">
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-4">
+                                        <TwoVideoChat/>
+                                        <ButtonPanel/>
+                                    </div>
+                                    <div className="col-8">
+                                        <TextMessageChat/>
+                                    </div>
                                 </div>
-                                <div className="col-8">
-                                    <TextMessageChat/>
-                                </div>
-                                
                             </div>
                         </div>
                     </div>
                 </div>
+                
             </div>
             
             

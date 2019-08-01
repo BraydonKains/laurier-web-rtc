@@ -10,11 +10,9 @@ class HomePage extends React.Component {
 
   render() {
       return (
-        <div className='background'> 
+        <div> 
             <NavBar menu={this.state.menu} />
             <div className='centerwhite px-3 pt-0 container'>
-              <div className="centerwhite">
-              </div>
             </div>
         </div>
       );

@@ -10,7 +10,7 @@ class About extends React.Component {
 
   render() {
       return (
-        <div className='background'> 
+        <div className> 
             <NavBar menu={this.state.menu} />
             <div className='centerwhite px-3 pt-0 container'>
               <div className='ml-3'>

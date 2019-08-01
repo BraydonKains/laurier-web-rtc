@@ -6,6 +6,7 @@ import RegisterForm from './Components/RegisterForm';
 import Login from './Components/Login'
 import About from './Components/About';
 import HomePage from './Components/HomePage';
+import Footer from './Components/Footer';
 
 function showHomePage() {
   return <HomePage />;
@@ -40,6 +41,7 @@ class App extends React.Component{
               <Route exact path="/" component={showLogin} />
               <Route path="/twopersonchat" component={showChat} />
               <Route path="/about" component={showAbout} />  
+              <Footer />
             </div> 
         </Router>
       );

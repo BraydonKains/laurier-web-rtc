@@ -1,16 +1,14 @@
-.inside {
-    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
-    width: 900px;
-    min-height: 900px;
-    margin: 0 auto;
-    background-color: white;
-}
-
 .centerwhite {
     background-color: white;
     min-height: 700px;
-    padding-top: 200px;
-    padding-left: 200px;
+    margin: auto;
+    padding-top: 20%;
+
+}
+
+.login {
+    margin : auto;
+    width : 60%;
 }
 
 .background {
@@ -37,17 +35,11 @@
     font-weight: 500;
 }
 
-.login {
-    margin: 0 auto;
-    float: none;
-}
-
 input {
     background: #FFFFFF;
     border: 1px solid rgba(0, 0, 0, 0.85);
     box-sizing: border-box;
     border-radius: 5px;
-    width: 527px;
     margin-left: 25px;
 }
 
@@ -58,9 +50,13 @@ input {
     line-height: 21px;
     color: #FFFFFF;
     background-color: #588157;
-    margin-left: 300px;
 }
 
-.text {
-    margin-left: 250px;
+.footer {
+    background-color: rgba(58, 90, 64, 0.5);
+    font-size: 16px;
+    width:89%;
+    min-height: 40px;
+    margin: auto;
 }
+

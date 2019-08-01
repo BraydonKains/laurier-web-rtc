@@ -13,20 +13,20 @@ class Login extends React.Component {
 
     render() {
         return (
-            <div className='background'> 
+            <div> 
                 <NavBar menu={this.state.menu} />
-                <div className='centerwhite px-3 pt-0 container'>
-                    <div className="centerwhite">
-                        <div className="login mb-3">
-                            Username: <input></input>
+                <div className='px-3 pt-0'>
+                    <div className="centerwhite container">
+                        <div className="login row col-8 mb-3">
+                            Username: <input className="col-12"></input>
                         </div>
-                        <div className="login mb-3">
-                            Password: <input className="ml-5"></input>
+                        <div className="login row mb-3 col-8">
+                            Password: <input className="col-12"></input>
                         </div>
-                        <Link className="login mb-3" to="/home">
+                        <Link className="login row mb-3 col-2" to="/home">
                             <button className="btn">Log In</button>
                         </Link>
-                        <div className="text">Not a member yet? Sign up 
+                        <div className="login row mb-3 col-3">Not a member yet? Sign up 
                             <Link to="/signup">
                                 <a href='#'>&nbsp; here</a>
                             </Link>
