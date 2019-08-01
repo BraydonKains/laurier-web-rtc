@@ -13,7 +13,7 @@ router.get('/', async function(req, res, next) {
 /* GET user by id */
 router.get("/:id", async function(req, res, next) {
     let u = await controller.show(req.params.id) 
-    res.send(u);
+    res.send(JSON.stringify(u));
 });
 
 /* POST to create user */
@@ -27,17 +27,17 @@ router.post("/create", async function(req, res, next) {
 router.patch("/update", async function(req, res, next) {
     console.log(req.body);
     let result = await controller.update(req.body);
-    res.send(result);
+    res.send(JSON.stringify(result));
 });
 
 /* POST to delete user */
 router.post("/delete/:id", async function(req, res, next) {
     let result = await controller.destroy(req.params.id);
-    res.send(result);
+    res.send(JSON.stringify(result));
 });
 
 router.post("/login", passport.authenticate('local'), function(req, res) {
-    res.sendStatus(200);
+    res.sendStatus(JSON.stringify(200));
 });
 
 module.exports = router;

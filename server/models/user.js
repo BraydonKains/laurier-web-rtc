@@ -5,7 +5,6 @@ class User {
 	this.id = null;
 	this.username = null;
 	this.email = null;
-	this.plain_pass = null;
     }
 
     async retrieve(id) {
