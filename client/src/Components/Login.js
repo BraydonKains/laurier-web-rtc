@@ -1,28 +1,32 @@
 import React from 'react';
 import '../style.css';
+import NavBar from './NavBar';
+import { Link } from "react-router-dom";
+
+
 
 class Login extends React.Component {
-
-    constructor(props) {
+constructor(props) {
 	super(props);
 
 	this.state = {
 	    username: '',
-	    password: ''
+	    password: '',
+      menu : [3, 2, 6]
 	};
 
 	this.handleUsernameChange = this.handleUsernameChange.bind(this);
 	this.handlePasswordChange = this.handlePasswordChange.bind(this);
 	this.loginSubmit = this.loginSubmit.bind(this);
-    }
+}
 
-    handleUsernameChange(event) {
+handleUsernameChange(event) {
 	this.setState({username: event.target.value});
-    }
-    handlePasswordChange(event) {
+}
+handlePasswordChange(event) {
 	this.setState({password: event.target.value});
-    }
-    loginSubmit(event) {
+}
+loginSubmit(event) {
 	event.preventDefault();
 	fetch(process.env.REACT_APP_API_URI + "users/login", {
 	    method: "POST",
@@ -40,9 +44,10 @@ class Login extends React.Component {
 	.catch(err => {
 	    console.log(err);
 	});
-    }
-  render() {
+}
+render() {
       return (
+        <NavBar menu={this.state.menu} />
         <div className='centerwhite px-3 pt-0 container'>
             <div className="centerwhite">
                 <div className="login mb-3">
@@ -54,11 +59,15 @@ class Login extends React.Component {
                 <div className="login mb-3">
                     <button className="btn" onClick={this.loginSubmit}>Log In</button>
                 </div>
-                <div className="text">Not a member yet? Sign up <a href='#' onClick={()=> this.props.changePage(2)}>here</a></div>
+                <div className="login row mb-3 col-3">Not a member yet? Sign up 
+                    <Link to="/signup">
+                        <a href='#'>&nbsp; here</a>
+                    </Link>
+                </div>
             </div>
-        </div>
-      );
-  }
+            
+        );
+}
 }
 
 export default Login;
