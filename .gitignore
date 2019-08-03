@@ -55,7 +55,16 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+*.env
 
 # next.js build output
 .next
+
+# tmp folder with local database data
+tmp/
+
+# swap files
+*.swp
+
+# Anything specific to prod
+.prod.*
