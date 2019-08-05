@@ -4,7 +4,7 @@ class TwoVideoChat extends React.Component{
         super(props);
 
         this.state = {
-        constraints: { audio: false, video: { width: 300, height: 300 } }
+        constraints: { audio: false, video: true }
         };
     }
 
@@ -31,7 +31,7 @@ class TwoVideoChat extends React.Component{
                 <div className="container w-100">
                     <div className="row">
                         <div className="col">
-                            <video className="" id="userVideo">Your Video</video>
+                            <video className="w-100" id="userVideo">Your Video</video>
                         </div>
                     </div>
                     <div className="row">

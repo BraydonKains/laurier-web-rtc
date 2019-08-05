@@ -4,6 +4,7 @@ import TwoVideoChat from './TwoVideoChat';
 import ButtonPanel from './ButtonPanel';
 
 class TwoPersonChatStation extends React.Component{
+
     render(){
         return(
             <div className="TwoPersonChatStation">
@@ -26,17 +27,4 @@ class TwoPersonChatStation extends React.Component{
         );
     }
 }
-/*
-<div className="container m-0 p-0 w-100">
-                        <div className="row">
-                            <div className="col">
-                                <TwoVideoChat />
-                                <ButtonPanel />
-                            </div>
-                            <div className="col">
-                                <TextMessageChat />
-                            </div>
-                        </div>
-                    </div>
-*/
 export default TwoPersonChatStation;
