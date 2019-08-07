@@ -1,5 +1,6 @@
 const User = require("../models/user.js");
 const pool = require("../pool.js");
+const bcrypt = require("bcrypt");
 exports.index = async function() {
     // SELECT * FROM users
     var u_arr = [];
@@ -31,11 +32,19 @@ exports.show = async function(_id) {
 exports.create = async function(_user) {
     let u = new User();
     u.username = _user.username;
-    // TO DO: Hash the password
-    u.plain_pass = _user.password;
     u.email = _user.email;
-    let result = await u.commit();
-    return result;
+    console.log(_user.password);
+    try {
+	const hash = await bcrypt.hash(_user.password, 10);
+
+	u.password = hash;
+	console.log("user password: " + u.password);
+	let result = await u.commit();
+	return result;
+    } catch(err) {
+	if(err) throw err;
+	return false;
+    }
 }
 
 exports.update = async function(_user) {
