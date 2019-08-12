@@ -5,7 +5,7 @@ var controller = require("../controllers/user_controller.js");
 var passport = require('passport');
 
 /* GET users listing. */
-router.get('/', async function(req, res, next) {
+router.get('/', isLoggedIn, async function(req, res, next) {
     let u = await controller.index();
     res.send(u);
 });
@@ -41,3 +41,13 @@ router.post("/login", passport.authenticate('local'), function(req, res) {
 });
 
 module.exports = router;
+
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated()) {
+	return next();
+    }
+
+    res.status(400).json({
+	'message': 'access denied'
+    });
+}
