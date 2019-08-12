@@ -1,17 +1,42 @@
 import React from 'react';
 class TwoVideoChat extends React.Component{
+    constructor(props){
+        super(props);
+
+        this.state = {
+        constraints: { audio: false, video: true }
+        };
+    }
+
+    componentDidMount(){
+        const constraints = this.state.constraints;
+
+        navigator.mediaDevices.getUserMedia(this.state.constraints).then((stream) => {
+            const video = document.getElementById("userVideo");
+            const vendorURL = window.URL || window.webkitURL;
+            if ("srcObject" in video) {
+                video.srcObject = stream;
+              } else {
+                video.src = window.URL.createObjectURL(stream);
+              }
+            video.play();
+        }).catch((error) => {
+            console.log(error);
+        })
+
+    }
     render(){
         return(
             <div className="TwoVideoChat">
                 <div className="container w-100">
                     <div className="row">
                         <div className="col">
-                            <video className="">Your Video</video>
+                            <video className="w-100" id="userVideo">Your Video</video>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col">
-                            <video className="">Other Person Video</video>
+                            <video className="" id="chatVideo">Other Person Video</video>
                         </div>
                     </div>
                 </div>
