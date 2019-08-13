@@ -47,6 +47,7 @@ loginSubmit(event) {
 }
 render() {
       return (
+		  <div>
         <NavBar menu={this.state.menu} />
         <div className='centerwhite px-3 pt-0 container'>
             <div className="centerwhite">
@@ -65,7 +66,8 @@ render() {
                     </Link>
                 </div>
             </div>
-            
+		</div>
+		</div>
         );
 }
 }
