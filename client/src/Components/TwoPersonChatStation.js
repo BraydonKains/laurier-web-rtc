@@ -27,6 +27,7 @@ class TwoPersonChatStation extends React.Component{
             localUserMedia={},
             remoteSrc={},
             selfSrc={},
+            caller={},
 
 
             menu =[1, 5]
@@ -77,25 +78,55 @@ class TwoPersonChatStation extends React.Component{
         GetRTCSessionDescription();
         GetRTCIceCandidate();
         prepareCaller();
-    
-    }
 
-    /*-----------------------------------------------------------------------------------------FIGURE OUT WHAT TO DO WITH THIS*/
-    callUser(user) {
+        //preparecaller
+        //Initializing a peer connection
+        this.setState({caller: new window.RTCPeerConnection});
+        //Listen for ICE Candidates and send them to remote peers
+        this.state.caller.onicecandidate = function(evt) {
+          if (!evt.candidate) return;
+          console.log("onicecandidate called");
+        //   onIceCandidate(caller, evt);
+            if (evt.candidate) {
+                channel.trigger("client-candidate", {
+                    "candidate": evt.candidate,
+                    "room": room
+                });
+            }
+        };
+        //------------------------------------------------------------------------------WONT NEED WITH 1 PERSON VIEW
+        //onaddstream handler to receive remote feed and show in remoteview video element
+        this.state.caller.onaddstream = function(evt) {
+          console.log("onaddstream called");
+          //----------------------------------------------------------------------------TAKE OUT THESE FOR 1 PERSON VIEW
+          if (window.URL) {
+              this.setState({remoteSrc:window.URL.createObjectURL});
+            // document.getElementById("remoteview").src = window.URL.createObjectURL(
+            //   evt.stream
+            // );
+          } else {
+              this.setState({remoteSrc:evt.stream})
+            // document.getElementById("remoteview").src = evt.stream;
+          }
+        };
+
+        channel.bind("client-candidate", function(msg) {
+            if(msg.room==room){
+                console.log("candidate received");
+                caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
+            }
+        });
+
         getCam()
           .then(stream => {
             if (window.URL) {
                 this.setState({selfSrc:window.URL.createObjectURL(stream)})
-            //   document.getElementById("selfview").src = window.URL.createObjectURL(
-            //     stream
-            //   );
             } else {
                 this.setState({selfSrc:stream});
-            //   document.getElementById("selfview").src = stream;
             }
             toggleEndCallButton();
             this.state.caller.addStream(stream);
-            localUserMedia = stream;
+            this.setState({localUserMedia: stream});
             this.state.caller.createOffer().then(function(desc) {
               this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
               channel.trigger("client-sdp", {
@@ -109,29 +140,124 @@ class TwoPersonChatStation extends React.Component{
           .catch(error => {
             console.log("an error occured", error);
           });
-      }
 
-    prepareCaller() {
-        //Initializing a peer connection
-        caller = new window.RTCPeerConnection();
-        //Listen for ICE Candidates and send them to remote peers
-        caller.onicecandidate = function(evt) {
-          if (!evt.candidate) return;
-          console.log("onicecandidate called");
-          onIceCandidate(caller, evt);
-        };
-        //onaddstream handler to receive remote feed and show in remoteview video element
-        caller.onaddstream = function(evt) {
-          console.log("onaddstream called");
-          if (window.URL) {
-            document.getElementById("remoteview").src = window.URL.createObjectURL(
-              evt.stream
-            );
-          } else {
-            document.getElementById("remoteview").src = evt.stream;
+          channel.bind("client-sdp", function(msg) {
+            if(msg.room == id){
+                var answer = confirm("You have a call from: "+ msg.from + "Would you like to answer?");
+                if(!answer){
+                    return channel.trigger("client-reject", {"room": msg.room, "rejected":id});
+                }
+                room = msg.room;
+                getCam()
+                .then(stream => {
+                    this.setState({localUserMedia:stream});
+                    toggleEndCallButton();
+                    if (window.URL) {
+                        document.getElementById("selfview").src = window.URL.createObjectURL(stream);
+                    } else {
+                        document.getElementById("selfview").src = stream;
+                    }
+                    this.state.caller.addStream(stream);
+                    this.setState({sessionDesc: new RTCSessionDescription(msg.dsp)});
+                    this.state.caller.setRemoteDescription(sessionDesc);
+                    this.state.caller.createAnswer().then(function(sdp) {
+                        this.state.caller.setLocalDescription(new RTCSessionDescription(sdp));
+                        channel.trigger("client-answer", {
+                            "sdp": sdp,
+                            "room": this.state.room
+                        });
+                    });
+    
+                })
+                .catch(error => {
+                    console.log('an error occured', error);
+                })
+            }
+        });
+        channel.bind("client-answer", function(answer) {
+          if (answer.room == this.state.room) {
+            console.log("answer received");
+            this.state.caller.setRemoteDescription(new RTCSessionDescription(answer.sdp));
           }
-        };
-      }
+        });
+    
+        channel.bind("client-reject", function(answer) {
+          if (answer.room == this.state.room) {
+            console.log("Call declined");
+            alert("call to " + answer.rejected + "was politely declined");
+            endCall();
+          }
+        });
+    
+    
+    }
+
+    endCall() {
+        this.setState({room : undefined});
+        this.state.caller.close();
+        for (let track of this.state.localUserMedia.getTracks()) {
+          track.stop();
+        }
+
+        //-------------------------------------------------------------------------------------CHANGE THIS PORTION(LEAVE CHAT)
+        prepareCaller();
+        toggleEndCallButton();
+      }  
+
+    /*-----------------------------------------------------------------------------------------FIGURE OUT WHAT TO DO WITH THIS*/
+    // callUser(user) {
+    //     getCam()
+    //       .then(stream => {
+    //         if (window.URL) {
+    //             this.setState({selfSrc:window.URL.createObjectURL(stream)})
+    //         //   document.getElementById("selfview").src = window.URL.createObjectURL(
+    //         //     stream
+    //         //   );
+    //         } else {
+    //             this.setState({selfSrc:stream});
+    //         //   document.getElementById("selfview").src = stream;
+    //         }
+    //         toggleEndCallButton();
+    //         this.state.caller.addStream(stream);
+    //         localUserMedia = stream;
+    //         this.state.caller.createOffer().then(function(desc) {
+    //           this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
+    //           channel.trigger("client-sdp", {
+    //             sdp: desc,
+    //             room: user,
+    //             from: id
+    //           });
+    //           room = user;
+    //         });
+    //       })
+    //       .catch(error => {
+    //         console.log("an error occured", error);
+    //       });
+    //   }
+
+    // prepareCaller() {
+    //     //Initializing a peer connection
+    //     caller = new window.RTCPeerConnection();
+    //     //Listen for ICE Candidates and send them to remote peers
+    //     caller.onicecandidate = function(evt) {
+    //       if (!evt.candidate) return;
+    //       console.log("onicecandidate called");
+    //       onIceCandidate(caller, evt);
+    //     };
+    //     //onaddstream handler to receive remote feed and show in remoteview video element
+    //     caller.onaddstream = function(evt) {
+    //       console.log("onaddstream called");
+    //       if (window.URL) {
+    //           this.setState({remoteSrc:window.URL.createObjectURL});
+    //         // document.getElementById("remoteview").src = window.URL.createObjectURL(
+    //         //   evt.stream
+    //         // );
+    //       } else {
+    //           this.setState({remoteSrc:evt.stream})
+    //         // document.getElementById("remoteview").src = evt.stream;
+    //       }
+    //     };
+    //   }
 
     handleTextChange(e){
         if(e.keyCode === 13){
