@@ -49,6 +49,10 @@ exports.up = function(db) {
 	type: 'string',
 	notNull: true
     },
+    password:
+    {
+	type: 'string'
+    },
     open:
     {
 	type: 'boolean',

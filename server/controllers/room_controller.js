@@ -30,6 +30,18 @@ exports.show = async function(_id) {
     return r;
 }
 
-exports.create = async function(_room) {
-    
+exports.create = async function(_room, _user_id) {
+    let r = new Room();
+    r.owner_id = _user_id;
+    r.capacity = 2;
+    r.room_type = _room.room_type;
+    r.open = false;
+    try {
+	const hash = await bcrypt.hash(_room.password, 10);
+	r.password = hash;
+	let result = await r.commit();
+    } catch(err) {
+	if(err) throw err;
+	return false;
+    }
 }

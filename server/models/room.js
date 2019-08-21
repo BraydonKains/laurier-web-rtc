@@ -7,6 +7,7 @@ class Room {
 	this.capacity = null;
 	this.room_type = null;
 	this.open = null;
+	this.password = null;
     }
 
     async retrieve(id) {
