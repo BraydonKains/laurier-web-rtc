@@ -47,29 +47,28 @@ loginSubmit(event) {
 }
 render() {
       return (
-		<div>
-			<NavBar menu={this.state.menu} />
-        	<div className='px-3 pt-0 container'>
-				<div className="centerwhite">
-					<div className="login row col-8 mb-3">
-						Username: <input value={this.state.username} onChange={this.handleUsernameChange} className="col-12"></input>
-					</div>
-					<div className="login row col-8 mb-3">
-						Password: <input value={this.state.password} onChange={this.handlePasswordChange} className="col-12" type="password"></input>
-					</div>
-					<div className="login row col-2 mb-3">
-						<button className="btn" onClick={this.loginSubmit}>Log In</button>
-					</div>
-					<div className="login row mb-3 col-3">Not a member yet? Sign up 
-						<Link to="/signup">
-							<a href='#'>&nbsp; here</a>
-						</Link>
-					</div>
-				</div>
-			</div>
+		  <div>
+        <NavBar menu={this.state.menu} />
+        <div className='centerwhite px-3 pt-0 container'>
+            <div className="centerwhite">
+                <div className="login mb-3">
+                    Username: <input value={this.state.username} onChange={this.handleUsernameChange}></input>
+                </div>
+                <div className="login mb-3">
+                    Password: <input value={this.state.password} onChange={this.handlePasswordChange} className="ml-5"></input>
+                </div>
+                <div className="login mb-3">
+                    <button className="btn" onClick={this.loginSubmit}>Log In</button>
+                </div>
+                <div className="login row mb-3 col-3">Not a member yet? Sign up 
+                    <Link to="/signup">
+                        <a href='#'>&nbsp; here</a>
+                    </Link>
+                </div>
+            </div>
 		</div>
-        
-            
+		</div>
+
         );
 }
 }
