@@ -8,18 +8,14 @@ import TwoVideoChat from './TwoVideoChat';
 import ButtonPanel from './ButtonPanel';
 import NavBar from './NavBar';
 
-class UserLogin extends React.Component{
-    constructor(props){
-        super(props);
-    }
-    render(){
+export default({name,password,passOnChange,nameOnChange,closePopup}) => {
         return (
             <div className='popup'>
               <div className='popup_inner'>
                 <h1>Login</h1>
-                Nickname:<input type="text"/>
-                Chat Password: <input type="text"/>
-              <button onClick={this.props.closePopup}>Done</button>
+                Nickname:<input type="text" onChange={nameOnChange}/>
+                Chat Password: <input type="text" onChange={passOnChange}/>
+              <button onClick={closePopup}>Done</button>
               </div>
             </div>
           );

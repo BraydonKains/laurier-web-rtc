@@ -16,6 +16,9 @@ class TwoPersonChatStation extends React.Component{
             username: '',
             chats: [],
 
+            nickname:{},
+            inputPassword:{},
+
             pusher:{},
             channel:{},
             caller:{},
@@ -48,8 +51,7 @@ class TwoPersonChatStation extends React.Component{
                 forceTLS: true
               });
             let chan = pusher.subscribe(this.props.chatId);
-            //***************************************************************************************************** */
-            
+ 
             chan.bind('message', data => {
                 this.setState({ chats: [...this.state.chats, data], test: '' });
               });
@@ -163,6 +165,8 @@ class TwoPersonChatStation extends React.Component{
         this.GetRTCIceCandidate = this.RTCIceCandidate.bind(this);
         this.GetRTCPeerConnection = this.RTCPeerConnection.bind(this);
         this.GetRTCSessionDescription = this.GetRTCSessionDescription.bind(this);
+        this.handleChangePass = this.handleChangePass.bind(this);
+        this.handleChangeName = this.handleChangeName.bind(this);
         
 
         //Send the ICE Candidate to the remote peer
@@ -322,6 +326,14 @@ class TwoPersonChatStation extends React.Component{
             // axios.post("LINK HERE/message",payload);
     }
 
+    handleChangeName(e){
+        this.setState({nickname:e.target.value});
+    }
+
+    handleChangePass(e){
+        this.setState({inputPassword:e.target.value});
+    }
+
     render(){
         return(
             <div class="background">
@@ -345,7 +357,10 @@ class TwoPersonChatStation extends React.Component{
                 </div>
                 {this.state.showPopup ? 
                     <UserLoginPrompt
-                        text='Close Me'
+                        name={this.state.nickname}
+                        password={this.state.inputPassword}
+                        passOnChange={this.handleChangePass}
+                        nameOnChange={this.handleChangeName}
                         closePopup={this.togglePopup.bind(this)}
                     />
                     : null
