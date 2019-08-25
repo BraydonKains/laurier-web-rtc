@@ -27,13 +27,13 @@ serviceWorker.unregister();
 
 
 
-// var pusher = new Pusher("XXX-API-KEY", {
-//     cluster: "XXX-API-CLUSTER",
-//     encrypted: true,
-//     authEndpoint: "pusher/auth"
-//   });
-// const a = pusher.subscribe("presence-videocall");
-// const channel = pusher.subscribe("presence-videocall");
+var pusher = new Pusher("XXX-API-KEY", {
+    cluster: "XXX-API-CLUSTER",
+    encrypted: true,
+    authEndpoint: "pusher/auth"
+  });
+const a = pusher.subscribe("presence-videocall");
+const channel = pusher.subscribe("presence-videocall");
 
 function GetRTCIceCandidate() {
     window.RTCIceCandidate =
@@ -63,33 +63,33 @@ function GetRTCIceCandidate() {
     return window.RTCSessionDescription;
   }
 
-  // function onIceCandidate(evt){
-  //   if (evt.candidate) {
-  //       channel.trigger("client-candidate", {
-  //           "candidate": evt.candidate,
-  //           "room": this.state. room
-  //       });
-  //   }
-  // }
+  function onIceCandidate(evt){
+    if (evt.candidate) {
+        channel.trigger("client-candidate", {
+            "candidate": evt.candidate,
+            "room": this.state. room
+        });
+    }
+  }
 
-  // function prepareCaller() {
-  //   //Initializing a peer connection
-  //   var caller = new window.RTCPeerConnection();
-  //   //Listen for ICE Candidates and send them to remote peers
-  //   caller.onicecandidate = function(evt) {
-  //     if (!evt.candidate) return;
-  //     console.log("onicecandidate called");
-  //     onIceCandidate(caller, evt);
-  //   };
-  //   //onaddstream handler to receive remote feed and show in remoteview video element
-  //   caller.onaddstream = function(evt) {
-  //     console.log("onaddstream called");
-  //     if (window.URL) {
-  //       document.getElementById("remoteview").src = window.URL.createObjectURL(
-  //         evt.stream
-  //       );
-  //     } else {
-  //       document.getElementById("remoteview").src = evt.stream;
-  //     }
-  //   };
-  // }
+  function prepareCaller() {
+    //Initializing a peer connection
+    var caller = new window.RTCPeerConnection();
+    //Listen for ICE Candidates and send them to remote peers
+    caller.onicecandidate = function(evt) {
+      if (!evt.candidate) return;
+      console.log("onicecandidate called");
+      onIceCandidate(caller, evt);
+    };
+    //onaddstream handler to receive remote feed and show in remoteview video element
+    caller.onaddstream = function(evt) {
+      console.log("onaddstream called");
+      if (window.URL) {
+        document.getElementById("remoteview").src = window.URL.createObjectURL(
+          evt.stream
+        );
+      } else {
+        document.getElementById("remoteview").src = evt.stream;
+      }
+    };
+  }

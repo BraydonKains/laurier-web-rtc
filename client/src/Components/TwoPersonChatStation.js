@@ -16,6 +16,10 @@ class TwoPersonChatStation extends React.Component{
             username: '',
             chats: [],
 
+            pusher:{},
+            channel:{},
+            caller:{},
+
             remoteSrc:{},
             selfSrc:{},
             usersOnline:{},
@@ -25,9 +29,129 @@ class TwoPersonChatStation extends React.Component{
             caller:{},
             localUserMedia:{},
 
+            showPopup: true,
+
             menu: [1, 5]
         };
     }
+
+    togglePopup() {
+        this.setState({
+          showPopup: !this.state.showPopup
+        });
+        //CHECK LOGIN INFO AND REQUEST
+        var PASSWORD_CORRECT = true;
+        if(PASSWORD_CORRECT){
+            //set up Pusher info
+            let push = new Pusher('ba473cb312963eb9be6a', {
+                cluster: 'us2',
+                forceTLS: true
+              });
+            let chan = pusher.subscribe(this.props.chatId);
+            //***************************************************************************************************** */
+            
+            chan.bind('message', data => {
+                this.setState({ chats: [...this.state.chats, data], test: '' });
+              });
+            
+            chan.bind("pusher:subscription_succeed",members=>{
+                this.setState({usersOnline:members.count,id:channel.members.id});
+    
+                //Can use later on to display who is in chat
+                members.each(member=>{
+                    if(member.id != channel.members.me.id)
+                        this.setState({users:this.state.users.concat(member.id)});
+                });
+                //if prof
+                    //have their video show in self view
+                    // getCam().then((stream) => {
+                    //     const video = document.getElementById("selfView");
+                    //     const vendorURL = window.URL || window.webkitURL;
+                    //     if ("srcObject" in video) {
+                    //     video.srcObject = stream;
+                    //     } else {
+                    //     video.src = window.URL.createObjectURL(stream);
+                    //     }
+                    //     video.play();
+                    //     caller.addStream(stream);
+                    //     this.setState({localUserMedia:stream});
+                    // })
+                    // .catch((error) => {
+                    //     console.log(error);
+                    // })
+    
+            });
+            
+            chan.bind("pusher:member_added",member => {
+                this.setState({users:this.state.users.concat(member.id)});
+                //if prof
+                    //have their video show in self view
+            });
+            //if a member is removed from chat
+            chan.bind("pusher:member_removed",member=>{
+                var list = this.state.users;
+                var index = list.indexOf(member.id);
+                list.splice(index,1);
+                this.setState({users:list});
+                if(list.length == 1 && list[0] == member.id){
+                    //__________________________________________________________________________END CALL
+                    // this.endCall();
+                    console.log("END CALL");
+                }
+                //if prof left
+                    //close chat
+            });
+            chan.bind("client-candidate", function(msg){
+                if(msg.room == this.state.room){
+                    console.log("candidate received");
+                    caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
+                }
+            });
+            chan.bind("client-sdp",function(msg){
+                if(msg.room == this.state.id){
+                    console.log("sdp received");
+                    //forces a join
+                    this.setState({room:msg.room});
+                    getCam().then(stream => {
+                        this.setState({localUserMedia:stream});
+                        //this.toggleEndCallButton();
+                        const video = document.getElementById("selfView");
+                        const vendorURL = window.URL || window.webkitURL;
+                        if ("srcObject" in video) {
+                            video.srcObject = stream;
+                        } else {
+                            video.src = window.URL.createObjectURL(stream);
+                        }
+                        video.play();
+                        caller.addStream(stream);
+                        var sessionDesc = new RTCSessionDescription(msg.sdp);
+                        caller.setRemoteDescription(sessionDesc);
+                        caller.createAnswer().then(function(sdp){
+                            caller.setLocalDescription(new RTCSessionDescription(sdp));
+                            channel.trigger("client-answer",{
+                                sdp:sdp,
+                                room: this.state.room
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.log("ERROR: ",error);
+                    })
+                }
+            });
+            chan.bind("client-endcall",function(answer){
+                if(answer.room == this.state.room){
+                    console.log("Call Ended");
+                    endCall();
+                }
+            });
+
+            //set up caller rtc connection
+            let call = new window.RTCPeerConnection();
+
+            this.setState({pusher=push,channel=chan,caller:call});
+        }
+      }
 
     //when the component is built set up requirments to make video chat and messaging work
     componentDidMount(){
@@ -39,80 +163,6 @@ class TwoPersonChatStation extends React.Component{
         this.GetRTCIceCandidate = this.RTCIceCandidate.bind(this);
         this.GetRTCPeerConnection = this.RTCPeerConnection.bind(this);
         this.GetRTCSessionDescription = this.GetRTCSessionDescription.bind(this);
-
-        //get connection to Pusher set up
-        var pusher = new Pusher('ba473cb312963eb9be6a', {
-            cluster: 'us2',
-            forceTLS: true
-          });
-      
-        //____________________________________________________________NEED CHAT ID HERE
-        const channel = pusher.subscribe("presence-videocall");
-
-
-        channel.bind('message', data => {
-          this.setState({ chats: [...this.state.chats, data], test: '' });
-        });
-        
-
-        //if prof
-          //usernamer is their name or user id
-        //if student
-          //username is randomly generated
-        
-        channel.bind("pusher:subscription_succeed",members=>{
-            this.setState({usersOnline:members.count,id:channel.members.id});
-
-            //Can use later on to display who is in chat
-            members.each(member=>{
-                if(member.id != channel.members.me.id)
-                    this.setState({users:this.state.users.concat(member.id)});
-            });
-            //if prof
-                //have their video show in self view
-                // getCam().then((stream) => {
-                //     const video = document.getElementById("selfView");
-                //     const vendorURL = window.URL || window.webkitURL;
-                //     if ("srcObject" in video) {
-                //     video.srcObject = stream;
-                //     } else {
-                //     video.src = window.URL.createObjectURL(stream);
-                //     }
-                //     video.play();
-                //     caller.addStream(stream);
-                //     this.setState({localUserMedia:stream});
-                // })
-                // .catch((error) => {
-                //     console.log(error);
-                // })
-
-        });
-        //if a member is added to the chat
-        channel.bind("pusher:member_added",member => {
-            this.setState({users:this.state.users.concat(member.id)});
-            //if prof
-                //have their video show in self view
-        });
-        //if a member is removed from chat
-        channel.bind("pusher:member_removed",member=>{
-            var list = this.state.users;
-            var index = list.indexOf(member.id);
-            list.splice(index,1);
-            this.setState({users:list});
-            if(list.length == 1 && list[0] == member.id){
-                //__________________________________________________________________________END CALL
-                // this.endCall();
-                console.log("END CALL");
-            }
-            //if prof left
-                //close chat
-        });
-        this.GetRTCPeerConnection();
-        this.GetRTCSessionDescription();
-        this.GetRTCIceCandidate();
-
-        //set up caller rtc connection
-        var caller = new window.RTCPeerConnection();
         
 
         //Send the ICE Candidate to the remote peer
@@ -127,12 +177,12 @@ class TwoPersonChatStation extends React.Component{
         }
 
         var prepareCaller = function(){
-            caller.oniceCandidate = function(evt){
+            this.state.caller.oniceCandidate = function(evt){
                 if(!evt.candidate)return;
                 console.log("onicecandidate called");
                 oniceCandidate(this.state.caller,evt);
             }
-            caller.onaddstream = function(evt){
+            this.state.caller.onaddstream = function(evt){
                 console.log("onaddstream called");
                 //if one view dont add new stream
                     
@@ -167,10 +217,10 @@ class TwoPersonChatStation extends React.Component{
                 video.src = window.URL.createObjectURL(stream);
                 }
                 video.play();
-                caller.addStream(stream);
+                this.state.caller.addStream(stream);
                 this.setState({localUserMedia:stream});
-                caller.createOffer().then(function(desc){
-                    caller.setLocalDescription(new RTCSessionDescription(desc));
+                this.state.caller.createOffer().then(function(desc){
+                    this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
                     channel.trigger("client-sdp",{
                         sdp:desc,
                         room:user,
@@ -185,7 +235,7 @@ class TwoPersonChatStation extends React.Component{
 
         var endCall = function(){
             this.setState({room:{}});
-            caller.close();
+            this.state.caller.close();
             for(let track of this.state.localUserMedia.getTracks()){
                 track.stop();
             }
@@ -196,58 +246,11 @@ class TwoPersonChatStation extends React.Component{
         }
 
         var endCurrentCall= function(){
-            channel.trigger("client-endcall",{
+            this.state.channel.trigger("client-endcall",{
                 room: this.state.room
             });
             endCall();
         }
-
-        channel.bind("client-candidate", function(msg){
-            if(msg.room == this.state.room){
-                console.log("candidate received");
-                caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
-            }
-        });
-
-        channel.bind("client-sdp",function(msg){
-            if(msg.room == this.state.id){
-                console.log("sdp received");
-                //forces a join
-                this.setState({room:msg.room});
-                getCam().then(stream => {
-                    this.setState({localUserMedia:stream});
-                    //this.toggleEndCallButton();
-                    const video = document.getElementById("selfView");
-                    const vendorURL = window.URL || window.webkitURL;
-                    if ("srcObject" in video) {
-                        video.srcObject = stream;
-                    } else {
-                        video.src = window.URL.createObjectURL(stream);
-                    }
-                    video.play();
-                    caller.addStream(stream);
-                    var sessionDesc = new RTCSessionDescription(msg.sdp);
-                    caller.setRemoteDescription(sessionDesc);
-                    caller.createAnswer().then(function(sdp){
-                        caller.setLocalDescription(new RTCSessionDescription(sdp));
-                        channel.trigger("client-answer",{
-                            sdp:sdp,
-                            room: this.state.room
-                        });
-                    });
-                })
-                .catch(error => {
-                    console.log("ERROR: ",error);
-                })
-            }
-        });
-
-        channel.bind("client-endcall",function(answer){
-            if(answer.room == this.state.room){
-                console.log("Call Ended");
-                endCall();
-            }
-        })
     
     
     }
@@ -340,7 +343,13 @@ class TwoPersonChatStation extends React.Component{
                         </div>
                     </div>
                 </div>
-                
+                {this.state.showPopup ? 
+                    <UserLoginPrompt
+                        text='Close Me'
+                        closePopup={this.togglePopup.bind(this)}
+                    />
+                    : null
+                }
             </div>
             
             

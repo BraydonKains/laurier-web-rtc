@@ -25,22 +25,18 @@ function showAbout() {
   return <About />;
 }
 
-function showChat() {
-  return <TwoPersonChatStation />;
+function showChat(id,user) {
+  //_____________________________________NEED CHAT ID AND USER ID
+  return <TwoPersonChatStation chatId={id} userId={user}/>;
 }
 
 class App extends React.Component{
-  constructor(props){
-    super(props);
-    this.state = { showPopup: true };
-    }
+  // constructor(props){
+  //   super(props);
+  //   this.state = { showPopup: true };
+  //   }
   
-    togglePopup() {
-     this.setState({
-       showPopup: !this.state.showPopup
-     });
-     //CHECK LOGIN INFO AND REQUEST
-   }
+    
   render() {
       return (
         <Router>
@@ -53,13 +49,7 @@ class App extends React.Component{
               <Route path="/twopersonchat" component={showChat} />
               <Route path="/about" component={showAbout} />  
               {/* <button onClick={this.togglePopup.bind(this)}>show popup</button> */}
-              {this.state.showPopup ? 
-          <UserLoginPrompt
-            text='Close Me'
-            closePopup={this.togglePopup.bind(this)}
-          />
-          : null
-        }
+            
               <Footer />
 
             </div> 
