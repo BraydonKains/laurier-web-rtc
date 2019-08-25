@@ -7,6 +7,7 @@ import Login from './Components/Login'
 import About from './Components/About';
 import HomePage from './Components/HomePage';
 import Footer from './Components/Footer';
+import UserLoginPrompt from './Components/UserLoginPrompt';
 
 function showHomePage() {
   return <HomePage />;
@@ -28,12 +29,22 @@ function showChat() {
   return <TwoPersonChatStation />;
 }
 
-
 class App extends React.Component{
-
+  constructor(props){
+    super(props);
+    this.state = { showPopup: true };
+    }
+  
+    togglePopup() {
+     this.setState({
+       showPopup: !this.state.showPopup
+     });
+     //CHECK LOGIN INFO AND REQUEST
+   }
   render() {
       return (
         <Router>
+          
             <div className='background'>
               <h1 className='jumbotron pageName mt-0 mb-4'>Laurier Web-RTC</h1>
               <Route path="/home" component={showHomePage} />
@@ -41,7 +52,16 @@ class App extends React.Component{
               <Route exact path="/" component={showLogin} />
               <Route path="/twopersonchat" component={showChat} />
               <Route path="/about" component={showAbout} />  
+              {/* <button onClick={this.togglePopup.bind(this)}>show popup</button> */}
+              {this.state.showPopup ? 
+          <UserLoginPrompt
+            text='Close Me'
+            closePopup={this.togglePopup.bind(this)}
+          />
+          : null
+        }
               <Footer />
+
             </div> 
         </Router>
       );

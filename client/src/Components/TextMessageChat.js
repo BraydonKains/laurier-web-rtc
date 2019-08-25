@@ -1,6 +1,7 @@
 import React from 'react';
 
-export default({chats,text,username,handleTextChange}) =>{
+export default({chats,text,username,handleChange}) =>{
+    return(
     <div className="TextMessageChat w-100 h-100 container">
         <div className="row h-90">
             <div className="col">
@@ -26,7 +27,7 @@ export default({chats,text,username,handleTextChange}) =>{
     
     
     
-    </div>
+    </div>);
 }
 
 //export default TextMessageChat;
