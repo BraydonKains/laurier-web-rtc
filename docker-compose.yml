@@ -17,7 +17,7 @@ services:
         container_name: server
         build: ./server
         expose: 
-            - 4000
+            - 3000
         env_file:
             - ./server/server.dev.env
         ports:
