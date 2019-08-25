@@ -20,6 +20,7 @@ class Room {
 		this.capacity = res.rows[0].capacity;
 		this.open = res.rows[0].open;
 		this.room_type = res.rows[0].room_type;
+		this.password = res.rows[0].password;
 	    }
 	} catch(err) {
 	    console.log(err);
@@ -32,6 +33,7 @@ class Room {
 	if(this.id) {
 	    try {
 		const res = await pool.query("UPDATE rooms SET open = $2 WHERE id = $1", [this.id, !this.open]);
+		this.open = !this.open;
 		success = true;
 	    } catch(err) {
 		console.log(err);
@@ -53,4 +55,16 @@ class Room {
 	return success;
     }
 
+    async commit() {
+	var success = false;
+	try {
+	    const res = await pool.query("INSERT INTO rooms (owner_id, capacity, room_type, password, open) VALUES ($1, $2, $3, $4, $5)", [this.owner_id, this.capacity, this.room_type, this.password, this.open]);
+	    success = "created";
+	} catch(err) {
+	    console.log(err);
+	}
+	return success;
+    }
 }
+
+module.exports = Room;

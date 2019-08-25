@@ -40,8 +40,34 @@ exports.create = async function(_room, _user_id) {
 	const hash = await bcrypt.hash(_room.password, 10);
 	r.password = hash;
 	let result = await r.commit();
+	return result;
     } catch(err) {
 	if(err) throw err;
 	return false;
     }
+    return true;
+}
+
+exports.subscribe = async function(_room_id, _password) {
+    let r = new Room();
+    await r.retrieve(_room_id);
+    console.log(r);
+    if(r.id != null && r.open) {
+	console.log(r.password);
+	if(bcrypt.compareSync(_password, r.password)) {
+	    return 'success';
+	} else {
+	    return 'wrong password';
+	}
+    } else {
+	return 'now allowed to subcribe to room';
+    }
+    return 'unexpected error';
+}
+
+exports.toggle_open = async function(_user_id, _room_id) {
+    let r = new Room();
+    await r.retrieve(_room_id);
+    let success = await r.change_room_state();
+    return success;
 }
