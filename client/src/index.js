@@ -4,6 +4,7 @@ import './index.css';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import Pusher from 'pusher';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

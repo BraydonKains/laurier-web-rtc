@@ -18,4 +18,4 @@ export default({endChatFunc})=>{
         </div>
     );
 }
-export default ButtonPanel;
+//export default ButtonPanel;

@@ -29,4 +29,4 @@ export default({chats,text,username,handleTextChange}) =>{
     </div>
 }
 
-export default TextMessageChat;
+//export default TextMessageChat;

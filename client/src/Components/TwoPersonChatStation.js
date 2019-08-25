@@ -11,10 +11,10 @@ import NavBar from './NavBar';
 class TwoPersonChatStation extends React.Component{
     constructor(props){
         super(props);
-        this.state={
-            text='',
-            username='',
-            chats=[],
+        this.state = {
+	    text: '',
+            username: '',
+            chats: [],
 
             remoteSrc:{},
             selfSrc:{},
@@ -25,8 +25,8 @@ class TwoPersonChatStation extends React.Component{
             caller:{},
             localUserMedia:{},
 
-            menu =[1, 5]
-        }
+            menu: [1, 5]
+        };
     }
 
     //when the component is built set up requirments to make video chat and messaging work
@@ -260,7 +260,7 @@ class TwoPersonChatStation extends React.Component{
             };
             //SEND MESSAGE
             //_______________________________________________________________________________________LINK HERE was http://localhost:5000
-            axios.post("LINK HERE/message",payload);
+            axios.post(process.env.REACT_APP_API_URI + "message",payload);
         }
         else{
             this.setState({text: e.target.value});
@@ -269,7 +269,7 @@ class TwoPersonChatStation extends React.Component{
 
     handleSend(){
         //_______________________________________________________________________________________LINK HERE was http://localhost:5000
-        axios.post("LINK HERE/message",payload);
+//        axios.post("LINK HERE/message",payload);
     }
   
     GetRTCIceCandidate() {

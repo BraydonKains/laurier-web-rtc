@@ -16,4 +16,4 @@ export default({remoteView,selfView}) => {
         </div>
     </div>
 }
-export default TwoVideoChat;
+//export default TwoVideoChat;
