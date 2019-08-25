@@ -1,6 +1,7 @@
 import React from 'react';
 
-export default({remoteView,selfView}) => {
+export default({remoteView,selfView}) =>{
+    return(
     <div className="TwoVideoChat">
         <div className="container w-100">
             <div className="row">
@@ -14,6 +15,6 @@ export default({remoteView,selfView}) => {
                 </div>
             </div>
         </div>
-    </div>
+    </div>)
 }
 //export default TwoVideoChat;

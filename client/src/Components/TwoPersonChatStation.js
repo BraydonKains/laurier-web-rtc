@@ -260,7 +260,7 @@ class TwoPersonChatStation extends React.Component{
             };
             //SEND MESSAGE
             //_______________________________________________________________________________________LINK HERE was http://localhost:5000
-            axios.post(process.env.REACT_APP_API_URI + "message",payload);
+            axios.post(process.env.REACT_APP_API_URI + "pusher/message",payload);
         }
         else{
             this.setState({text: e.target.value});
