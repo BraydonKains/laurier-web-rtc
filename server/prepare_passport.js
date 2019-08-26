@@ -10,12 +10,9 @@ exports.prepare = () => {
 	u.retrieve_name(username)
 	    .then(() => {
 		if(u.id != null) {
-		    console.log("hello in then");
 		    if(bcrypt.compareSync(password, u.password)) {
-			console.log("wow we did it");
 			return done(null, u);
 		    } else {
-			console.log("wow we did not");
 			return done(null, false);
 		    }
 		}

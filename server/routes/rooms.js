@@ -10,10 +10,19 @@ router.get('/', async function(req, res, next) {
     res.send(JSON.stringify(r));
 });
 
-/* GET rooms by id */
+/* GET room by id */
 router.get("/:id", async function(req, res, next) {
     let r = await controller.show(req.params.id) 
     res.send(JSON.stringify(r));
+});
+
+/* GET all rooms for a user */
+router.get('/user/:id', async function(req, res, next) {
+    let r = await controller.user_index(req.params.id);
+    let result = {
+	room_list: r
+    };
+    res.send(JSON.stringify(result));
 });
 
 /* POST to create room */

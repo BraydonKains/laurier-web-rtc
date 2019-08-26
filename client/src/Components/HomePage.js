@@ -29,8 +29,10 @@ class HomePage extends React.Component {
     modalIsOpen: false
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    console.log("props");
+    console.log(this.props);
  
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
@@ -49,16 +51,20 @@ class HomePage extends React.Component {
     // references are now sync'd and can be accessed.
   }
 
+    createRoom() {
+	this.closeModal();
+    }
+
   render() {
       return (
         <div> 
             <NavBar menu={this.state.menu} />
             <div className='centerwhite px-3 pt-0 container'>
-              <h2>Welcome Chinh!</h2>
+              <h2>Welcome { this.props.location.username }!</h2>
               <div className="my-4">
                 <button onClick={this.openModal}>Create a room</button>
               </div>
-              <RoomTable />
+              <RoomTable username={this.props.location.username} user_id={this.props.location.user_id} />
             </div>
 
             <Modal
@@ -92,7 +98,7 @@ class HomePage extends React.Component {
                   <div className="col-8 ml-3"><input type="radio" name="roomType" value="0" className="mr-2" />One to Multiple Session</div>
                 </div>
                 <Link to="/twopersonchat">
-                  <button onClick={this.closeModal}>
+                  <button onClick={this.createRoom}>
                     Create Room
                   </button>
                 </Link>

@@ -1,7 +1,7 @@
 import React from 'react';
 import '../style.css';
 import NavBar from './NavBar';
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 
 
@@ -12,7 +12,9 @@ constructor(props) {
 	this.state = {
 	    username: '',
 	    password: '',
-      menu : [3, 2, 6]
+	    user_id: 0,
+	    menu : [3, 2, 6],
+	    redirect: false
 	};
 
 	this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -39,13 +41,22 @@ loginSubmit(event) {
 	})
 	.then(res => res)
 	.then(res => {
-	    this.props.changePage(4);
+	    console.log(res);
+	    this.setState({user_id: res.id, redirect: true});
 	})
 	.catch(err => {
 	    console.log(err);
 	});
 }
 render() {
+    if (this.state.redirect) {
+	return <Redirect push to={{
+	    pathname: '/home',
+	    user_id: this.state.user_id,
+	    username: this.state.username
+	}}
+	/>
+    }
       return (
 		  <div>
         <NavBar menu={this.state.menu} />
