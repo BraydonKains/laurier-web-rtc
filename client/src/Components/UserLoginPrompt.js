@@ -9,16 +9,16 @@ import ButtonPanel from './ButtonPanel';
 import NavBar from './NavBar';
 
 export default({name,password,passOnChange,nameOnChange,closePopup}) => {
-        return (
-            <div className='popup'>
-              <div className='popup_inner'>
-                <h1>Login</h1>
-                Nickname:<input type="text" onChange={nameOnChange}/>
-                Chat Password: <input type="text" onChange={passOnChange}/>
-              <button onClick={closePopup}>Done</button>
-              </div>
-            </div>
-          );
-    }
+  return (
+      <div className='popup'>
+        <div className='popup_inner'>
+          <h1>Login</h1>
+          Nickname:<input type="text" onChange={nameOnChange}/>
+          Chat Password: <input type="text" onChange={passOnChange}/>
+        <button onClick={closePopup}>Done</button>
+        </div>
+      </div>
+  );
 }
-export default UserLogin;
+
+// export default UserLogin;
