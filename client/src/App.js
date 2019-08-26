@@ -43,10 +43,10 @@ class App extends React.Component{
           
             <div className='background'>
               <h1 className='jumbotron pageName mt-0 mb-4'>Laurier Web-RTC</h1>
-              <Route path="/home" component={showHomePage} />
+              <Route path="/home" component={HomePage} />
               <Route path="/signup" component={showRegister} />
               <Route exact path="/" component={showLogin} />
-              <Route path="/twopersonchat" component={showChat} />
+              <Route path="/room/:id" component={showChat} />
               <Route path="/about" component={showAbout} />  
               {/* <button onClick={this.togglePopup.bind(this)}>show popup</button> */}
             

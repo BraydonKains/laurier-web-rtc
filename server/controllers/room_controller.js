@@ -14,6 +14,30 @@ exports.index = async function() {
 	    r.owner_id = res.rows[i].username;
 	    r.capacity = res.rows[i].capacity;
 	    r.open = res.rows[i].open;
+	    r.name = res.rows[i].name;
+	    r_arr.push(r);
+	}
+    } catch(err) {
+	console.log(err);
+    }
+
+    console.log(r_arr);
+    return r_arr;
+}
+
+exports.user_index = async function(_user_id) {
+    var r_arr = [];
+
+    try {
+	const res = await pool.query("SELECT * FROM rooms WHERE owner_id = $1", [_user_id]);
+
+	for(i=0; i<res.rows.length; i++) {
+	    let r = new Room();
+	    r.id = res.rows[i].id;
+	    r.owner_id = res.rows[i].username;
+	    r.capacity = res.rows[i].capacity;
+	    r.open = res.rows[i].open;
+	    r.name = res.rows[i].name;
 	    r_arr.push(r);
 	}
     } catch(err) {
@@ -36,6 +60,7 @@ exports.create = async function(_room, _user_id) {
     r.capacity = 2;
     r.room_type = _room.room_type;
     r.open = false;
+    r.name = _room.name;
     try {
 	const hash = await bcrypt.hash(_room.password, 10);
 	r.password = hash;
