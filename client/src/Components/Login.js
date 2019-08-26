@@ -39,7 +39,7 @@ loginSubmit(event) {
 	    },
 	    body: JSON.stringify(this.state)
 	})
-	.then(res => res)
+	.then(res => res.json())
 	.then(res => {
 	    console.log(res);
 	    this.setState({user_id: res.id, redirect: true});

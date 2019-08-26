@@ -19,10 +19,10 @@ class RooomTable extends React.Component {
 		'Content-Type': 'application/json',
 	    }
 	})
-	.then(res => res)
+	.then(res => res.json())
 	.then(res => {
-	    console.log("found rooms");
-	    this.setState({roomList: res.room_list});
+	    console.log(res.room_list);
+	    this.setState({room_list: res.room_list});
 	})
 	.catch(err => {
 	    console.log(err);
