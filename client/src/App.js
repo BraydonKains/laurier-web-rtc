@@ -27,7 +27,7 @@ function showAbout() {
 
 function showChat(id,user) {
   //_____________________________________NEED CHAT ID AND USER ID
-  return <TwoPersonChatStation chatId={id} userId={user}/>;
+  return <TwoPersonChatStation userId={user}/>;
 }
 
 class App extends React.Component{

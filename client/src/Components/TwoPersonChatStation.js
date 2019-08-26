@@ -10,6 +10,7 @@ import NavBar from './NavBar';
 import UserLoginPrompt from './UserLoginPrompt';
 
 class TwoPersonChatStation extends React.Component{
+// function TwoPersonChatStation({match}){
     constructor(props){
         super(props);
         this.state = {
@@ -33,7 +34,7 @@ class TwoPersonChatStation extends React.Component{
             caller:{},
             localUserMedia:{},
 
-            showPopup: true,
+            showPopup: this.props.location.state.user_id ? false:true,
 
             menu: [1, 5]
         };
@@ -95,7 +96,7 @@ class TwoPersonChatStation extends React.Component{
                 this.channel.trigger("client-sdp",{
                     sdp:desc,
                     room:user,
-                    from: this.state.id
+                    from: this.props.userId
                 });
                 this.setState({room:user})
             });
@@ -135,7 +136,7 @@ class TwoPersonChatStation extends React.Component{
                 cluster: 'us2',
                 forceTLS: true
               });
-            let chan = this.state.pusher.subscribe(this.props.chatId);
+            let chan = this.state.pusher.subscribe(this.props.match.params.room_id);
  
             chan.bind('message', data => {
                 this.setState({ chats: [...this.state.chats, data], test: '' });
@@ -195,7 +196,7 @@ class TwoPersonChatStation extends React.Component{
                 }
             });
             chan.bind("client-sdp",function(msg){
-                if(msg.room == this.state.id){
+                if(msg.room == this.props.userid){
                     console.log("sdp received");
                     //forces a join
                     this.setState({room:msg.room});
