@@ -308,7 +308,7 @@ class TwoPersonChatStation extends React.Component{
                     room:this.props.location.state.user_id,
                     from: this.state.id
                 });
-                this.setState({room:user})
+                this.setState({room:this.props.location.state.user_id})
             });
         }).catch((error) => {
             console.log(error);
