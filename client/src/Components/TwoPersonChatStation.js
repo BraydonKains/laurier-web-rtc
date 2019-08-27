@@ -274,23 +274,28 @@ class TwoPersonChatStation extends React.Component{
     }
 
     handleTextChange(e){
-        if(e.keyCode === 13){
-            const payload = {
-                username: this.state.username,
-                message:this.state.text
-            };
-            //SEND MESSAGE
-            //_______________________________________________________________________________________LINK HERE was http://localhost:5000
-            axios.post(process.env.REACT_APP_API_URI + "pusher/message",payload);
-        }
-        else{
+        // if(e.keyCode === 13){
+        //     const payload = {
+        //         username: this.state.username,
+        //         message:this.state.text
+        //     };
+        //     //SEND MESSAGE
+        //     //_______________________________________________________________________________________LINK HERE was http://localhost:5000
+        //     axios.post(process.env.REACT_APP_API_URI + "pusher/message",payload);
+        // }
+        // else{
             this.setState({text: e.target.value});
-        }
+        // }
     }
 
     handleSend(){
         //_______________________________________________________________________________________LINK HERE was http://localhost:5000
 //        axios.post("LINK HERE/message",payload);
+        const payload = {
+            username: this.state.username,
+            message:this.state.text
+        };
+        axios.post(process.env.REACT_APP_API_URI + "pusher/message",payload);
     }
 
     turnOnCamera(){
@@ -389,7 +394,7 @@ class TwoPersonChatStation extends React.Component{
                                         <ButtonPanel startCam={this.turnOnCamera} stopCam={this.endCall}/>
                                     </div>
                                     <div className="col-8">
-                                        <TextMessageChat chats={this.state.chats} text={this.state.text} username={this.state.username} handleChange={this.handleTextChange} />
+                                        <TextMessageChat chats={this.state.chats} text={this.state.text} username={this.state.username} handleChange={this.handleTextChange} handleSend={this.handleSend}/>
                                     </div>
                                 </div>
                             </div>
