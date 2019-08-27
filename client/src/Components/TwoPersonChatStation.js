@@ -37,6 +37,11 @@ class TwoPersonChatStation extends React.Component{
 
             menu: [1, 5]
         };
+	let push = new Pusher('ba473cb312963eb9be6a', {
+	    cluster: 'us2',
+	    forceTLS: true
+	});
+	this.setState({pusher: push});
     }
     oniceCandidate(evt){
         if (evt.candidate) {
@@ -131,10 +136,6 @@ class TwoPersonChatStation extends React.Component{
         var PASSWORD_CORRECT = true;
         if(PASSWORD_CORRECT){
             //set up Pusher info
-            let push = new Pusher('ba473cb312963eb9be6a', {
-                cluster: 'us2',
-                forceTLS: true
-              });
             let chan = this.state.pusher.subscribe(this.props.chatId);
  
             chan.bind('message', data => {
@@ -236,7 +237,7 @@ class TwoPersonChatStation extends React.Component{
             //set up caller rtc connection
             let call = new window.RTCPeerConnection();
 
-            this.setState({pusher:push,channel:chan,caller:call});
+            this.setState({channel:chan,caller:call});
         }
       }
 
@@ -247,8 +248,8 @@ class TwoPersonChatStation extends React.Component{
         this.endChatProf = this.endChatProf.bind(this);
         this.endChatStudent = this.endChatStudent.bind(this);
         this.handleSend = this.handleSend.bind(this);
-        this.GetRTCIceCandidate = this.RTCIceCandidate.bind(this);
-        this.GetRTCPeerConnection = this.RTCPeerConnection.bind(this);
+        this.GetRTCIceCandidate = this.GetRTCIceCandidate.bind(this);
+        this.GetRTCPeerConnection = this.GetRTCPeerConnection.bind(this);
         this.GetRTCSessionDescription = this.GetRTCSessionDescription.bind(this);
         this.handleChangePass = this.handleChangePass.bind(this);
         this.handleChangeName = this.handleChangeName.bind(this);
