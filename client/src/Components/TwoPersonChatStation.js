@@ -20,7 +20,11 @@ class TwoPersonChatStation extends React.Component{
             nickname:{},
             inputPassword:{},
 
-            pusher:{},
+            pusher: new Pusher('ba473cb312963eb9be6a', {
+	    cluster: 'us2',
+	    forceTLS: true,
+	    authEndpoint: "pusher/auth"
+	    }),
             channel:{},
             caller:{},
 
@@ -59,10 +63,10 @@ class TwoPersonChatStation extends React.Component{
         this.oniceCandidate = this.oniceCandidate.bind(this);
         this.getCam = this.getCam.bind(this);
         this.prepareCaller =this.prepareCaller.bind(this);
+      
         // this.callUser = this.callUser.bind(this);
         this.endCall = this.endCall.bind(this);
         this.endCurrentCall = this.endCurrentCall.bind(this);
-
     }
     oniceCandidate(evt){
         if (evt.candidate) {
@@ -157,7 +161,8 @@ class TwoPersonChatStation extends React.Component{
         var PASSWORD_CORRECT = true;
         if(PASSWORD_CORRECT){
             //set up Pusher info
-            let chan = this.state.pusher.subscribe(this.props.chatId);
+	    console.log(this.props);
+            let chan = this.state.pusher.subscribe(this.props.chatId.match.params.id);
  
             chan.bind('message', data => {
                 this.setState({ chats: [...this.state.chats, data], test: '' });
@@ -265,7 +270,6 @@ class TwoPersonChatStation extends React.Component{
     //when the component is built set up requirments to make video chat and messaging work
     componentDidMount(){
 
-        
     
     }
 
@@ -394,10 +398,10 @@ class TwoPersonChatStation extends React.Component{
                 </div>
                 {this.state.showPopup ? 
                     <UserLoginPrompt
-                        name={this.state.nickname}
-                        password={this.state.inputPassword}
-                        passOnChange={this.handleChangePass}
-                        nameOnChange={this.handleChangeName}
+                        // name={this.state.nickname}
+                        // password={this.state.inputPassword}
+                        passOnChange={this.handleChangePass.bind(this)}
+                        nameOnChange={this.handleChangeName.bind(this)}
                         closePopup={this.togglePopup.bind(this)}
                     />
                     : null

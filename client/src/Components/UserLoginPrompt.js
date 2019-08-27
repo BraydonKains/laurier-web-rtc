@@ -8,7 +8,10 @@ import TwoVideoChat from './TwoVideoChat';
 import ButtonPanel from './ButtonPanel';
 import NavBar from './NavBar';
 
-export default({name,password,passOnChange,nameOnChange,closePopup}) => {
+
+
+export default({passOnChange,nameOnChange,closePopup}) => {
+  
   return (
       <div className='popup'>
         <div className='popup_inner'>
