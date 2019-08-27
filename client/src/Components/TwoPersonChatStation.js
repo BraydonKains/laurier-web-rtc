@@ -153,6 +153,8 @@ class TwoPersonChatStation extends React.Component{
         this.endCall();
     }
 
+    //HERE
+
     togglePopup() {
         this.setState({
           showPopup: !this.state.showPopup
