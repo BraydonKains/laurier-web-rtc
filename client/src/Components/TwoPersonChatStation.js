@@ -41,12 +41,12 @@ class TwoPersonChatStation extends React.Component{
 
             menu: [1, 5]
         };
-        let push = new Pusher('ba473cb312963eb9be6a', {
+/*        let push = new Pusher('ba473cb312963eb9be6a', {
             cluster: 'us2',
             forceTLS: true
-        });
+        });*/
         
-        this.setState({pusher: push});
+       // this.setState({pusher: push});
 
         this.turnOnCamera = this.turnOnCamera.bind(this);
 
@@ -72,7 +72,7 @@ class TwoPersonChatStation extends React.Component{
         if (evt.candidate) {
             this.state.channel.trigger("client-candidate", {
                 "candidate": evt.candidate,
-                "room": this.state.room
+                "room": this.props.chatId.match.params.id
             });
         }
     }
@@ -148,24 +148,26 @@ class TwoPersonChatStation extends React.Component{
 
     endCurrentCall(){
         this.state.channel.trigger("client-endcall",{
-            room: this.state.room
+            room: this.props.chatId.match.params.id
         });
         this.endCall();
     }
+
+    //HERE
 
     togglePopup() {
         this.setState({
           showPopup: !this.state.showPopup
         });
         //CHECK LOGIN INFO AND REQUEST
+        alert("TOGGLE DONE");
         var PASSWORD_CORRECT = true;
         if(PASSWORD_CORRECT){
+            alert("INPUT RIGHT");
             //set up Pusher info
-	    console.log(this.props);
             let chan = this.state.pusher.subscribe(this.props.chatId.match.params.id);
- 
             chan.bind('message', data => {
-                this.setState({ chats: [...this.state.chats, data], test: '' });
+                this.setState({ chats: data});
               });
             
             chan.bind("pusher:subscription_succeed",members=>{
@@ -197,6 +199,7 @@ class TwoPersonChatStation extends React.Component{
             });
             
             chan.bind("pusher:member_added",member => {
+                alert("NEW USER ENTERED THE CHAT");
                 this.setState({users:this.state.users.concat(member.id)});
                 //if prof
                     //have their video show in self view
@@ -216,16 +219,16 @@ class TwoPersonChatStation extends React.Component{
                     //close chat
             });
             chan.bind("client-candidate", function(msg){
-                if(msg.room == this.state.room){
+                if(msg.room == this.props.chatId.match.params.id){
                     console.log("candidate received");
                     this.state.caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
                 }
             });
             chan.bind("client-sdp",function(msg){
-                if(msg.room == this.state.id){
+                if(msg.room == this.props.chatId.match.params.id){
                     console.log("sdp received");
                     //forces a join
-                    this.setState({room:msg.room});
+                    // this.setState({room:msg.room});
                     this.getCam().then(stream => {
                         this.setState({localUserMedia:stream});
                         //this.toggleEndCallButton();
@@ -244,7 +247,7 @@ class TwoPersonChatStation extends React.Component{
                             this.caller.setLocalDescription(new RTCSessionDescription(sdp));
                             this.channel.trigger("client-answer",{
                                 sdp:sdp,
-                                room: this.state.room
+                                room: this.props.chatId.match.params.id
                             });
                         });
                     })
@@ -254,7 +257,7 @@ class TwoPersonChatStation extends React.Component{
                 }
             });
             chan.bind("client-endcall",function(answer){
-                if(answer.room == this.state.room){
+                if(answer.room == this.props.chatId.match.params.id){
                     console.log("Call Ended");
                     this.endCall();
                 }
@@ -274,23 +277,28 @@ class TwoPersonChatStation extends React.Component{
     }
 
     handleTextChange(e){
-        if(e.keyCode === 13){
-            const payload = {
-                username: this.state.username,
-                message:this.state.text
-            };
-            //SEND MESSAGE
-            //_______________________________________________________________________________________LINK HERE was http://localhost:5000
-            axios.post(process.env.REACT_APP_API_URI + "pusher/message",payload);
-        }
-        else{
+        // if(e.keyCode === 13){
+        //     const payload = {
+        //         username: this.state.username,
+        //         message:this.state.text
+        //     };
+        //     //SEND MESSAGE
+        //     //_______________________________________________________________________________________LINK HERE was http://localhost:5000
+        //     axios.post(process.env.REACT_APP_API_URI + "pusher/message",payload);
+        // }
+        // else{
             this.setState({text: e.target.value});
-        }
+        // }
     }
 
     handleSend(){
         //_______________________________________________________________________________________LINK HERE was http://localhost:5000
 //        axios.post("LINK HERE/message",payload);
+        const payload = {
+            username: this.state.nickname,
+            message:this.state.text
+        };
+        axios.post(process.env.REACT_APP_API_URI + "pusher/message",payload);
     }
 
     turnOnCamera(){
@@ -309,10 +317,10 @@ class TwoPersonChatStation extends React.Component{
                 this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
                 this.channel.trigger("client-sdp",{
                     sdp:desc,
-                    room:this.props.location.state.user_id,
+                    room:this.props.chatId.match.params.id,
                     from: this.state.id
                 });
-                this.setState({room:this.props.location.state.user_id})
+                this.setState({room:this.props.chatId.match.params.id})
             });
         }).catch((error) => {
             console.log(error);
@@ -389,7 +397,7 @@ class TwoPersonChatStation extends React.Component{
                                         <ButtonPanel startCam={this.turnOnCamera} stopCam={this.endCall}/>
                                     </div>
                                     <div className="col-8">
-                                        <TextMessageChat chats={this.state.chats} text={this.state.text} username={this.state.username} handleChange={this.handleTextChange} />
+                                        <TextMessageChat chats={this.state.chats} text={this.state.text} username={this.state.username} handleChange={this.handleTextChange} handleSend={this.handleSend}/>
                                     </div>
                                 </div>
                             </div>
