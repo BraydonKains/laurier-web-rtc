@@ -5,7 +5,7 @@ import axios from 'axios';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import Pusher from 'pusher';
+import Pusher from 'pusher-js';
 import ReactDom from 'react-dom';
 import Popup from 'react-popup';
 
@@ -27,11 +27,12 @@ serviceWorker.unregister();
 
 
 
-var pusher = new Pusher("XXX-API-KEY", {
-    cluster: "XXX-API-CLUSTER",
-    encrypted: true,
+var pusher = new Pusher('ba473cb312963eb9be6a', {
+    cluster: 'us2',// process.env.REACT_APP_PUSHER_CLUSTER,
+    forceTLS: true,
     authEndpoint: "pusher/auth"
   });
+console.log(pusher);
 const a = pusher.subscribe("presence-videocall");
 const channel = pusher.subscribe("presence-videocall");
 

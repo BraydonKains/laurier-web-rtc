@@ -51,6 +51,10 @@ class HomePage extends React.Component {
     // references are now sync'd and can be accessed.
   }
 
+    handleNewRoomNameChange() {
+
+    }
+
     createRoom() {
 	this.closeModal();
     }
