@@ -72,7 +72,7 @@ class TwoPersonChatStation extends React.Component{
         if (evt.candidate) {
             this.state.channel.trigger("client-candidate", {
                 "candidate": evt.candidate,
-                "room": this.props.location.state.room_id
+                "room": this.props.chatId.match.params.id
             });
         }
     }
@@ -148,7 +148,7 @@ class TwoPersonChatStation extends React.Component{
 
     endCurrentCall(){
         this.state.channel.trigger("client-endcall",{
-            room: this.props.location.state.room_id
+            room: this.props.chatId.match.params.id
         });
         this.endCall();
     }
@@ -221,13 +221,13 @@ class TwoPersonChatStation extends React.Component{
                     //close chat
             });
             chan.bind("client-candidate", function(msg){
-                if(msg.room == this.props.location.state.room_id){
+                if(msg.room == this.props.chatId.match.params.id){
                     console.log("candidate received");
                     this.state.caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
                 }
             });
             chan.bind("client-sdp",function(msg){
-                if(msg.room == this.props.location.state.room_id){
+                if(msg.room == this.props.chatId.match.params.id){
                     console.log("sdp received");
                     //forces a join
                     // this.setState({room:msg.room});
@@ -249,7 +249,7 @@ class TwoPersonChatStation extends React.Component{
                             this.caller.setLocalDescription(new RTCSessionDescription(sdp));
                             this.channel.trigger("client-answer",{
                                 sdp:sdp,
-                                room: this.props.location.state.room_id
+                                room: this.props.chatId.match.params.id
                             });
                         });
                     })
@@ -259,7 +259,7 @@ class TwoPersonChatStation extends React.Component{
                 }
             });
             chan.bind("client-endcall",function(answer){
-                if(answer.room == this.props.location.state.room_id){
+                if(answer.room == this.props.chatId.match.params.id){
                     console.log("Call Ended");
                     this.endCall();
                 }
@@ -319,10 +319,10 @@ class TwoPersonChatStation extends React.Component{
                 this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
                 this.channel.trigger("client-sdp",{
                     sdp:desc,
-                    room:this.props.location.state.room_id,
+                    room:this.props.chatId.match.params.id,
                     from: this.state.id
                 });
-                this.setState({room:this.props.location.state.room_id})
+                this.setState({room:this.props.chatId.match.params.id})
             });
         }).catch((error) => {
             console.log(error);
