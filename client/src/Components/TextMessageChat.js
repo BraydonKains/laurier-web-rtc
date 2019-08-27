@@ -20,7 +20,7 @@ export default({chats,text,username,handleChange,handleSend}) =>{
                     <textarea id="userMessage" className="messageInput w-90 float-left" onChange={handleChange} onKeyDown={handleChange}>
 
                     </textarea>
-                    <button className="sendButton" onClick={this.handleSend}>Send</button>
+                    <button className="sendButton" onClick={handleSend}>Send</button>
                 </div>
             </div>
         </div>
