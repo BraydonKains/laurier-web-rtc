@@ -41,12 +41,12 @@ class TwoPersonChatStation extends React.Component{
 
             menu: [1, 5]
         };
-        let push = new Pusher('ba473cb312963eb9be6a', {
+/*        let push = new Pusher('ba473cb312963eb9be6a', {
             cluster: 'us2',
             forceTLS: true
-        });
+        });*/
         
-        this.setState({pusher: push});
+       // this.setState({pusher: push});
 
         this.turnOnCamera = this.turnOnCamera.bind(this);
 
@@ -165,10 +165,8 @@ class TwoPersonChatStation extends React.Component{
         if(PASSWORD_CORRECT){
             alert("INPUT RIGHT");
             //set up Pusher info
-	    console.log(this.props);
             let chan = this.state.pusher.subscribe(this.props.chatId.match.params.id);
             chan.bind('message', data => {
-                alert(data);
                 this.setState({ chats: data});
               });
             
