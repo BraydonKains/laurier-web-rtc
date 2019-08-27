@@ -37,6 +37,24 @@ class TwoPersonChatStation extends React.Component{
 
             menu: [1, 5]
         };
+
+        this.handleTextChange = this.handleTextChange.bind(this);
+        this.endChatProf = this.endChatProf.bind(this);
+        this.endChatStudent = this.endChatStudent.bind(this);
+        this.handleSend = this.handleSend.bind(this);
+        this.GetRTCIceCandidate = this.GetRTCIceCandidate.bind(this);
+        this.GetRTCPeerConnection = this.GetRTCPeerConnection.bind(this);
+        this.GetRTCSessionDescription = this.GetRTCSessionDescription.bind(this);
+        this.handleChangePass = this.handleChangePass.bind(this);
+        this.handleChangeName = this.handleChangeName.bind(this);
+        this.togglePopup = this.togglePopup.bind(this);
+        this.oniceCandidate = this.oniceCandidate.bind(this);
+        this.getCam = this.getCam.bind(this);
+        this.prepareCaller =this.prepareCaller.bind(this);
+        this.callUser = this.callUser.bind(this);
+        this.endCall = this.endCall.bind(this);
+        this.endCurrentCall = this.endCurrentCall.bind(this);
+        
 	let push = new Pusher('ba473cb312963eb9be6a', {
 	    cluster: 'us2',
 	    forceTLS: true
@@ -244,22 +262,22 @@ class TwoPersonChatStation extends React.Component{
     //when the component is built set up requirments to make video chat and messaging work
     componentDidMount(){
 
-        this.handleTextChange = this.handleTextChange.bind(this);
-        this.endChatProf = this.endChatProf.bind(this);
-        this.endChatStudent = this.endChatStudent.bind(this);
-        this.handleSend = this.handleSend.bind(this);
-        this.GetRTCIceCandidate = this.GetRTCIceCandidate.bind(this);
-        this.GetRTCPeerConnection = this.GetRTCPeerConnection.bind(this);
-        this.GetRTCSessionDescription = this.GetRTCSessionDescription.bind(this);
-        this.handleChangePass = this.handleChangePass.bind(this);
-        this.handleChangeName = this.handleChangeName.bind(this);
-        this.togglePopup = this.togglePopup.bind(this);
-        this.oniceCandidate = this.oniceCandidate.bind(this);
-        this.getCam = this.getCam.bind(this);
-        this.prepareCaller =this.prepareCaller.bind(this);
-        this.callUser = this.callUser.bind(this);
-        this.endCall = this.endCall.bind(this);
-        this.endCurrentCall = this.endCurrentCall.bind(this);
+        // this.handleTextChange = this.handleTextChange.bind(this);
+        // this.endChatProf = this.endChatProf.bind(this);
+        // this.endChatStudent = this.endChatStudent.bind(this);
+        // this.handleSend = this.handleSend.bind(this);
+        // this.GetRTCIceCandidate = this.GetRTCIceCandidate.bind(this);
+        // this.GetRTCPeerConnection = this.GetRTCPeerConnection.bind(this);
+        // this.GetRTCSessionDescription = this.GetRTCSessionDescription.bind(this);
+        // this.handleChangePass = this.handleChangePass.bind(this);
+        // this.handleChangeName = this.handleChangeName.bind(this);
+        // this.togglePopup = this.togglePopup.bind(this);
+        // this.oniceCandidate = this.oniceCandidate.bind(this);
+        // this.getCam = this.getCam.bind(this);
+        // this.prepareCaller =this.prepareCaller.bind(this);
+        // this.callUser = this.callUser.bind(this);
+        // this.endCall = this.endCall.bind(this);
+        // this.endCurrentCall = this.endCurrentCall.bind(this);
     
     }
 
@@ -363,8 +381,8 @@ class TwoPersonChatStation extends React.Component{
                     <UserLoginPrompt
                         // name={this.state.nickname}
                         // password={this.state.inputPassword}
-                        passOnChange={this.handleChangePass}
-                        nameOnChange={this.handleChangeName}
+                        passOnChange={this.handleChangePass.bind(this)}
+                        nameOnChange={this.handleChangeName.bind(this)}
                         closePopup={this.togglePopup.bind(this)}
                     />
                     : null
