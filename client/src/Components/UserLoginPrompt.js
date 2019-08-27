@@ -10,14 +10,14 @@ import NavBar from './NavBar';
 
 
 
-export default({name,password,passOnChange,nameOnChange,closePopup}) => {
+export default({passOnChange,nameOnChange,closePopup}) => {
   
   return (
       <div className='popup'>
         <div className='popup_inner'>
           <h1>Login</h1>
-          Nickname:<input type="text" onChange={nameOnChange.bind(this)} value={name}/>
-          Chat Password: <input type="text" onChange={passOnChange.bind(this)} value={password}/>
+          Nickname:<input type="text" onChange={nameOnChange}/>
+          Chat Password: <input type="text" onChange={passOnChange}/>
         <button onClick={closePopup}>Done</button>
         </div>
       </div>

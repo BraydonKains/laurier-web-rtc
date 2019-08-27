@@ -361,8 +361,8 @@ class TwoPersonChatStation extends React.Component{
                 </div>
                 {this.state.showPopup ? 
                     <UserLoginPrompt
-                        name={this.state.nickname}
-                        password={this.state.inputPassword}
+                        // name={this.state.nickname}
+                        // password={this.state.inputPassword}
                         passOnChange={this.handleChangePass}
                         nameOnChange={this.handleChangeName}
                         closePopup={this.togglePopup.bind(this)}
