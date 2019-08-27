@@ -68,7 +68,7 @@ class TwoPersonChatStation extends React.Component{
         if (evt.candidate) {
             this.state.channel.trigger("client-candidate", {
                 "candidate": evt.candidate,
-                "room": this.state. room
+                "room": this.state.room
             });
         }
     }
@@ -305,7 +305,7 @@ class TwoPersonChatStation extends React.Component{
                 this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
                 this.channel.trigger("client-sdp",{
                     sdp:desc,
-                    room:user,
+                    room:this.props.location.state.user_id,
                     from: this.state.id
                 });
                 this.setState({room:user})
