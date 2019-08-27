@@ -1,5 +1,5 @@
 import React from 'react';
-export default({endChatFunc})=>{
+export default({startCam,stopCam})=>{
     return(
         <div className="ButtonPanel">
             <div className="container w-100">
@@ -10,8 +10,8 @@ export default({endChatFunc})=>{
                 </div>
                 <div className="row">
                     <div className="col p-2 d-inline">
-                        <button className="startButton rounded">Start</button>
-                        <button className="float-right stopButton rounded" onClick={endChatFunc}>Exit Chat</button>
+                        <button className="startButton rounded" onClick={startCam}>Start</button>
+                        <button className="float-right stopButton rounded" onClick={stopCam}>Exit Chat</button>
                     </div>
                 </div>
             </div>

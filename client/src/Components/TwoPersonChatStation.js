@@ -13,7 +13,7 @@ class TwoPersonChatStation extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-	    text: '',
+	        text: '',
             username: '',
             chats: [],
 
@@ -41,6 +41,14 @@ class TwoPersonChatStation extends React.Component{
 
             menu: [1, 5]
         };
+        let push = new Pusher('ba473cb312963eb9be6a', {
+            cluster: 'us2',
+            forceTLS: true
+        });
+        
+        this.setState({pusher: push});
+
+        this.turnOnCamera = this.turnOnCamera.bind(this);
 
         this.handleTextChange = this.handleTextChange.bind(this);
         this.endChatProf = this.endChatProf.bind(this);
@@ -55,16 +63,16 @@ class TwoPersonChatStation extends React.Component{
         this.oniceCandidate = this.oniceCandidate.bind(this);
         this.getCam = this.getCam.bind(this);
         this.prepareCaller =this.prepareCaller.bind(this);
-        this.callUser = this.callUser.bind(this);
+      
+        // this.callUser = this.callUser.bind(this);
         this.endCall = this.endCall.bind(this);
         this.endCurrentCall = this.endCurrentCall.bind(this);
-        
     }
     oniceCandidate(evt){
         if (evt.candidate) {
             this.state.channel.trigger("client-candidate", {
                 "candidate": evt.candidate,
-                "room": this.state. room
+                "room": this.state.room
             });
         }
     }
@@ -100,31 +108,31 @@ class TwoPersonChatStation extends React.Component{
 
     //Create and send offer to remote peer on button click
     //should only be used if student
-    callUser(user){
-        this.getCam().then((stream) => {
-            const video = document.getElementById("selfView");
-            const vendorURL = window.URL || window.webkitURL;
-            if ("srcObject" in video) {
-            video.srcObject = stream;
-            } else {
-            video.src = window.URL.createObjectURL(stream);
-            }
-            video.play();
-            this.state.caller.addStream(stream);
-            this.setState({localUserMedia:stream});
-            this.state.caller.createOffer().then(function(desc){
-                this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
-                this.channel.trigger("client-sdp",{
-                    sdp:desc,
-                    room:user,
-                    from: this.state.id
-                });
-                this.setState({room:user})
-            });
-        }).catch((error) => {
-            console.log(error);
-        })
-    }
+    // callUser(user){
+    //     this.getCam().then((stream) => {
+    //         const video = document.getElementById("selfView");
+    //         const vendorURL = window.URL || window.webkitURL;
+    //         if ("srcObject" in video) {
+    //         video.srcObject = stream;
+    //         } else {
+    //         video.src = window.URL.createObjectURL(stream);
+    //         }
+    //         video.play();
+    //         this.state.caller.addStream(stream);
+    //         this.setState({localUserMedia:stream});
+    //         this.state.caller.createOffer().then(function(desc){
+    //             this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
+    //             this.channel.trigger("client-sdp",{
+    //                 sdp:desc,
+    //                 room:user,
+    //                 from: this.state.id
+    //             });
+    //             this.setState({room:user})
+    //         });
+    //     }).catch((error) => {
+    //         console.log(error);
+    //     })
+    // }
 
     endCall(){
         this.setState({room:{}});
@@ -262,22 +270,6 @@ class TwoPersonChatStation extends React.Component{
     //when the component is built set up requirments to make video chat and messaging work
     componentDidMount(){
 
-        // this.handleTextChange = this.handleTextChange.bind(this);
-        // this.endChatProf = this.endChatProf.bind(this);
-        // this.endChatStudent = this.endChatStudent.bind(this);
-        // this.handleSend = this.handleSend.bind(this);
-        // this.GetRTCIceCandidate = this.GetRTCIceCandidate.bind(this);
-        // this.GetRTCPeerConnection = this.GetRTCPeerConnection.bind(this);
-        // this.GetRTCSessionDescription = this.GetRTCSessionDescription.bind(this);
-        // this.handleChangePass = this.handleChangePass.bind(this);
-        // this.handleChangeName = this.handleChangeName.bind(this);
-        // this.togglePopup = this.togglePopup.bind(this);
-        // this.oniceCandidate = this.oniceCandidate.bind(this);
-        // this.getCam = this.getCam.bind(this);
-        // this.prepareCaller =this.prepareCaller.bind(this);
-        // this.callUser = this.callUser.bind(this);
-        // this.endCall = this.endCall.bind(this);
-        // this.endCurrentCall = this.endCurrentCall.bind(this);
     
     }
 
@@ -300,6 +292,33 @@ class TwoPersonChatStation extends React.Component{
         //_______________________________________________________________________________________LINK HERE was http://localhost:5000
 //        axios.post("LINK HERE/message",payload);
     }
+
+    turnOnCamera(){
+        this.getCam().then((stream) => {
+            const video = document.getElementById("selfView");
+            const vendorURL = window.URL || window.webkitURL;
+            if ("srcObject" in video) {
+            video.srcObject = stream;
+            } else {
+            video.src = window.URL.createObjectURL(stream);
+            }
+            video.play();
+            this.state.caller.addStream(stream);
+            this.setState({localUserMedia:stream});
+            this.state.caller.createOffer().then(function(desc){
+                this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
+                this.channel.trigger("client-sdp",{
+                    sdp:desc,
+                    room:this.props.location.state.user_id,
+                    from: this.state.id
+                });
+                this.setState({room:this.props.location.state.user_id})
+            });
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
   
     GetRTCIceCandidate() {
         window.RTCIceCandidate =
@@ -367,10 +386,10 @@ class TwoPersonChatStation extends React.Component{
                                 <div className="row">
                                     <div className="col-4">
                                         <TwoVideoChat remoteView={this.state.remoteSrc} selfView={this.state.selfSrc}/>
-                                        <ButtonPanel endChatFunc={this.endChat}/>
+                                        <ButtonPanel startCam={this.turnOnCamera} stopCam={this.endCall}/>
                                     </div>
                                     <div className="col-8">
-                                        <TextMessageChat chats={this.state.chats} text={this.state.text} username={this.state.username} handleTextChange={this.state.handleTextChange} />
+                                        <TextMessageChat chats={this.state.chats} text={this.state.text} username={this.state.username} handleChange={this.handleTextChange} />
                                     </div>
                                 </div>
                             </div>

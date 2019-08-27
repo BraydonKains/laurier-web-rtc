@@ -17,6 +17,7 @@ ReactDom.render(
   document.getElementById('root')
 );
 
+
 Popup.alert('I am alert, nice to meet you');
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -33,6 +34,7 @@ var pusher = new Pusher('ba473cb312963eb9be6a', {
     authEndpoint: "pusher/auth"
   });
 console.log(pusher);
+
 const a = pusher.subscribe("presence-videocall");
 const channel = pusher.subscribe("presence-videocall");
 
