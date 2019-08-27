@@ -160,12 +160,13 @@ class TwoPersonChatStation extends React.Component{
           showPopup: !this.state.showPopup
         });
         //CHECK LOGIN INFO AND REQUEST
+        alert("TOGGLE DONE");
         var PASSWORD_CORRECT = true;
         if(PASSWORD_CORRECT){
+            alert("INPUT RIGHT");
             //set up Pusher info
 	    console.log(this.props);
             let chan = this.state.pusher.subscribe(this.props.chatId.match.params.id);
- 
             chan.bind('message', data => {
                 alert(data);
                 this.setState({ chats: data});
@@ -200,6 +201,7 @@ class TwoPersonChatStation extends React.Component{
             });
             
             chan.bind("pusher:member_added",member => {
+                alert("NEW USER ENTERED THE CHAT");
                 this.setState({users:this.state.users.concat(member.id)});
                 //if prof
                     //have their video show in self view
@@ -295,7 +297,7 @@ class TwoPersonChatStation extends React.Component{
         //_______________________________________________________________________________________LINK HERE was http://localhost:5000
 //        axios.post("LINK HERE/message",payload);
         const payload = {
-            username: this.state.username,
+            username: this.state.nickname,
             message:this.state.text
         };
         axios.post(process.env.REACT_APP_API_URI + "pusher/message",payload);
