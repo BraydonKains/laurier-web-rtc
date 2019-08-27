@@ -20,7 +20,11 @@ class TwoPersonChatStation extends React.Component{
             nickname:{},
             inputPassword:{},
 
-            pusher:{},
+            pusher: new Pusher('ba473cb312963eb9be6a', {
+	    cluster: 'us2',
+	    forceTLS: true,
+	    authEndpoint: "pusher/auth"
+	    }),
             channel:{},
             caller:{},
 
@@ -55,11 +59,6 @@ class TwoPersonChatStation extends React.Component{
         this.endCall = this.endCall.bind(this);
         this.endCurrentCall = this.endCurrentCall.bind(this);
         
-	let push = new Pusher('ba473cb312963eb9be6a', {
-	    cluster: 'us2',
-	    forceTLS: true
-	});
-	this.setState({pusher: push});
     }
     oniceCandidate(evt){
         if (evt.candidate) {
@@ -154,7 +153,8 @@ class TwoPersonChatStation extends React.Component{
         var PASSWORD_CORRECT = true;
         if(PASSWORD_CORRECT){
             //set up Pusher info
-            let chan = this.state.pusher.subscribe(this.props.chatId);
+	    console.log(this.props);
+            let chan = this.state.pusher.subscribe(this.props.chatId.match.params.id);
  
             chan.bind('message', data => {
                 this.setState({ chats: [...this.state.chats, data], test: '' });
