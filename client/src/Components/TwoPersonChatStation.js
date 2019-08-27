@@ -167,7 +167,8 @@ class TwoPersonChatStation extends React.Component{
             let chan = this.state.pusher.subscribe(this.props.chatId.match.params.id);
  
             chan.bind('message', data => {
-                this.setState({ chats: [...this.state.chats, data], test: '' });
+                alert(data);
+                this.setState({ chats: data});
               });
             
             chan.bind("pusher:subscription_succeed",members=>{
