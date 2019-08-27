@@ -26,7 +26,11 @@ class HomePage extends React.Component {
 
   state = {
     menu : [4,5],
-    modalIsOpen: false
+    modalIsOpen: false,
+
+    roomVal:"",
+    passwordVal:"",
+    typeVal:"0"
   }
 
   constructor(props) {
@@ -37,6 +41,9 @@ class HomePage extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+      this.handleRoomChange = this.handleRoomChange.bind(this);
+      this.handleTypeChange = this.handleTypeChange.bind(this);
   }
 
   openModal() {
@@ -58,6 +65,22 @@ class HomePage extends React.Component {
     createRoom() {
 	this.closeModal();
     }
+
+  handleRoomChange(event){
+    var val = event.target.value;
+    this.setState({roomVal:val});
+    // console.log(thi);
+  }
+
+  handlePasswordChange(event){
+    var val = event.target.value;
+    this.setState({passwordVal:val});
+  }
+
+  handleTypeChange(event){
+    var val = event.target.value;
+    this.setState({typeVal:val});
+  }
 
   render() {
       return (
@@ -87,19 +110,19 @@ class HomePage extends React.Component {
                 </div>
                 <div className="row col-12">
                   <div className="col-2">Room Name: </div>
-                  <div><input className="col-10"/></div>
+                  <div><input onChange={this.handleRoomChange} value={this.state.roomVal} className="col-10"/></div>
                 </div>
                 <div className="row col-12 mt-4">
                   <div className="col-2">Password: </div>
-                  <div><input className="col-10" type="password"/></div>
+                  <div><input onChange={this.handlePasswordChange} value={this.state.passwordVal}  className="col-10" type="password"/></div>
                 </div>
                 <div className="row mt-4 col-12">
                   <div className="col-2">Type: </div>
-                  <div className="col-8 ml-3"><input type="radio" name="roomType" value="0" className="mr-2" />One to One Session</div>
+                  <div className="col-8 ml-3"><input type="radio" name="roomType" checked={this.state.typeVal == "0"} value="0" className="mr-2"  onChange={this.handleTypeChange}/>One to One Session</div>
                 </div>
                 <div className="row col-12">
                   <div className="col-2"> </div>
-                  <div className="col-8 ml-3"><input type="radio" name="roomType" value="0" className="mr-2" />One to Multiple Session</div>
+                  <div className="col-8 ml-3"><input type="radio" name="roomType" checked={this.state.typeVal == "1"} value="1" className="mr-2" onChange={this.handleTypeChange}/>One to Multiple Session</div>
                 </div>
                 <Link to="/twopersonchat">
                   <button onClick={this.createRoom}>
