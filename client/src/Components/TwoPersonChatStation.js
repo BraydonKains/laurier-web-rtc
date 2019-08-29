@@ -20,7 +20,7 @@ class TwoPersonChatStation extends React.Component{
             }),
             channel:{},
             usersOnline:{},
-            id: typeOf (this.props.location.state.user_id) ? this.props.location.state.user_id:0,
+            id: typeof this.props.location.state !== "undefined" ? this.props.location.state.user_id:0,
             caller:{},
             sessionDesc:{},
             remoteSrc:{},
@@ -245,14 +245,14 @@ class TwoPersonChatStation extends React.Component{
     }
     callUser(user){
         this.getCam().then(stream => {
-            const video = document.getElementById("selfView");
+           /* const video = document.getElementById("selfView");
             const vendorURL = window.URL || window.webkitURL;
             if ("srcObject" in video) {
                 video.srcObject = stream;
             } else {
                 video.src = window.URL.createObjectURL(stream);
             }
-            video.play();
+            video.play();*/
             this.state.caller.addStream(stream);
             this.setState({localUserMedia:stream});
 

@@ -27,7 +27,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 serviceWorker.unregister();
 
 
-
+/*
 var pusher = new Pusher('ba473cb312963eb9be6a', {
     cluster: 'us2',// process.env.REACT_APP_PUSHER_CLUSTER,
     forceTLS: true,
@@ -95,4 +95,4 @@ function GetRTCIceCandidate() {
         document.getElementById("remoteview").src = evt.stream;
       }
     };
-  }
+  }*/
