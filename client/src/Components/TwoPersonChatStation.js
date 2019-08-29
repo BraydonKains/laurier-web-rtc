@@ -160,10 +160,10 @@ class TwoPersonChatStation extends React.Component{
 
         this.setState({caller:new window.RTCPeerConnection()});
 
-        this.GetRTCPeerConnection();
-        this.GetRTCSessionDescription();
-        this.GetRTCIceCandidate();
-        this.prepareCaller();
+        // this.GetRTCPeerConnection();
+        // this.GetRTCSessionDescription();
+        // this.GetRTCIceCandidate();
+        // this.prepareCaller();
         //     
       }
     }
@@ -244,7 +244,9 @@ class TwoPersonChatStation extends React.Component{
         });
     }
     callUser(user){
-        this.getCam().then(stream => {
+        var stream = this.state.localUserMedia;
+        try{
+        // this.getCam().then(stream => {
            /* const video = document.getElementById("selfView");
             const vendorURL = window.URL || window.webkitURL;
             if ("srcObject" in video) {
@@ -254,7 +256,7 @@ class TwoPersonChatStation extends React.Component{
             }
             video.play();*/
             this.state.caller.addStream(stream);
-            this.setState({localUserMedia:stream});
+            // this.setState({localUserMedia:stream});
 
             this.state.caller.createOffer().then(function(desc){
                 this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
@@ -265,10 +267,11 @@ class TwoPersonChatStation extends React.Component{
                 });
                 this.setState({room:user});
             })
-        })
-        .catch(error => {
+        }
+        catch(error) {
             console.log('an error occured',error);
-        })
+        }
+
     }
 
     endCall(){
@@ -276,6 +279,7 @@ class TwoPersonChatStation extends React.Component{
         this.state.caller.close();
         // this.state.localUserMedia.stop();
         // for(let t of this.state.localUserMedia.getTracks()){t.stop();}
+
         this.prepareCaller();
     }
 
@@ -307,7 +311,7 @@ class TwoPersonChatStation extends React.Component{
             }
             video.play();
             // this.state.caller.addStream(stream);
-            // this.setState({localUserMedia:stream});
+            this.setState({localUserMedia:stream});
             // this.state.caller.createOffer().then(function(desc){
             //     this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
             //     this.channel.trigger("client-sdp",{
@@ -320,6 +324,10 @@ class TwoPersonChatStation extends React.Component{
         }).catch((error) => {
             console.log(error);
         })
+        this.GetRTCPeerConnection();
+        this.GetRTCSessionDescription();
+        this.GetRTCIceCandidate();
+        this.prepareCaller();
     }
 
     render(){
