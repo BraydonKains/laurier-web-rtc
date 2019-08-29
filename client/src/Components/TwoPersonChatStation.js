@@ -26,7 +26,9 @@ class TwoPersonChatStation extends React.Component{
             remoteSrc:{},
             selfSrc:{},
             localUserMedia:{},
-            room:{},
+            room:this.props.chatId.match.params.id,
+
+            showPopup:true,
 
             text: '',
             username: '',
@@ -156,6 +158,8 @@ class TwoPersonChatStation extends React.Component{
 
         this.setState({channel:chan});
 
+        this.setState({caller:new window.RTCPeerConnection()});
+
         this.GetRTCPeerConnection();
         this.GetRTCSessionDescription();
         this.GetRTCIceCandidate();
@@ -215,7 +219,7 @@ class TwoPersonChatStation extends React.Component{
         return window.RTCSessionDescription;
     }
     prepareCaller(){
-        this.setState({caller:new window.RTCPeerConnection()});
+        // this.setState({caller:new window.RTCPeerConnection()});
         this.state.caller.onicecandidate = function(evt){
             if(!evt.candidate) return;
             console.log("onicecandidate called");
