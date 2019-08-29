@@ -26,7 +26,7 @@ class TwoPersonChatStation extends React.Component{
             remoteSrc:{},
             selfSrc:{},
             localUserMedia:{},
-            room:this.props.chatId.match.params.id,
+            room:this.props.match.params.id,
 
             showPopup:true,
 
