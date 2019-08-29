@@ -108,7 +108,9 @@ class TwoPersonChatStation extends React.Component{
                     return this.state.channel.trigger("client-reject",{"room":msg.room,"reject":this.state.id})
                 }
                 this.setState({room:msg.room});
-                this.getCam().then(stream => {
+                var stream = this.state.localUserMedia;
+                try{
+                // this.getCam().then(stream => {
                     // this.setState({localUserMedia:stream});
                     // const video = document.getElementById("selfView");
                     // const vendorURL = window.URL || window.webkitURL;
@@ -130,10 +132,10 @@ class TwoPersonChatStation extends React.Component{
                         });
                     });
 
-                })
-                .catch(error =>{
+                }
+                catch(error){
                     console.log("an error occured", error);
-                })
+                }
             }
         });
         chan.bind("client-answer",function(answer){
