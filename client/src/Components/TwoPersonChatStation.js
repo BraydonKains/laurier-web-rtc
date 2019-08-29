@@ -20,7 +20,7 @@ class TwoPersonChatStation extends React.Component{
             }),
             channel:{},
             usersOnline:{},
-            id:this.props.location.state.user_id!=undefined ? this.props.location.state.user_id:0,
+            id: typeOf (this.props.location.state.user_id) ? this.props.location.state.user_id:0,
             caller:{},
             sessionDesc:{},
             remoteSrc:{},
