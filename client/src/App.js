@@ -46,7 +46,7 @@ class App extends React.Component{
               <Route path="/home" component={HomePage} />
               <Route path="/signup" component={showRegister} />
               <Route exact path="/" component={showLogin} />
-              <Route path="/room/:id" component={showChat} />
+              <Route path="/room/:id" component={TwoPersonChatStation} />
               <Route path="/about" component={showAbout} />  
               {/* <button onClick={this.togglePopup.bind(this)}>show popup</button> */}
             

@@ -13,147 +13,64 @@ class TwoPersonChatStation extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-	        text: '',
+            pusher: new Pusher('ba473cb312963eb9be6a', {
+	    cluster: 'us2',
+	    forceTLS: true,
+	    authEndpoint: "pusher/auth"
+            }),
+            channel:{},
+            usersOnline:{},
+            id: typeof this.props.location.state !== "undefined" ? this.props.location.state.user_id:0,
+            caller:{},
+            sessionDesc:{},
+            remoteSrc:{},
+            selfSrc:{},
+            localUserMedia:{},
+            room:this.props.match.params.id,
+
+            showPopup:true,
+
+            text: '',
             username: '',
             chats: [],
 
             nickname:{},
             inputPassword:{},
-
-            pusher: new Pusher('ba473cb312963eb9be6a', {
-	    cluster: 'us2',
-	    forceTLS: true,
-	    authEndpoint: "pusher/auth"
-	    }),
-            channel:{},
-            caller:{},
-
-            remoteSrc:{},
-            selfSrc:{},
-            usersOnline:{},
-            id:{},
-            users:[],
-            room:{},
-            caller:{},
-            localUserMedia:{},
-
-            showPopup: true,
-
             menu: [1, 5]
-        };
-/*        let push = new Pusher('ba473cb312963eb9be6a', {
-            cluster: 'us2',
-            forceTLS: true
-        });*/
-        
-       // this.setState({pusher: push});
 
-        this.turnOnCamera = this.turnOnCamera.bind(this);
+        }
 
-        this.handleTextChange = this.handleTextChange.bind(this);
-        this.endChatProf = this.endChatProf.bind(this);
-        this.endChatStudent = this.endChatStudent.bind(this);
-        this.handleSend = this.handleSend.bind(this);
         this.GetRTCIceCandidate = this.GetRTCIceCandidate.bind(this);
         this.GetRTCPeerConnection = this.GetRTCPeerConnection.bind(this);
         this.GetRTCSessionDescription = this.GetRTCSessionDescription.bind(this);
+        this.prepareCaller = this.prepareCaller.bind(this);
+        this.getCam = this.getCam.bind(this);
+	this.turnOnCamera = this.turnOnCamera(this);
+        this.callUser = this.callUser.bind(this);
+        this.endCall = this.endCall.bind(this);
+        this.onIceCandidate = this.onIceCandidate.bind(this);
+
+        // this.turnOnCamera = this.turnOnCamera.bind(this);
+
+        this.handleTextChange = this.handleTextChange.bind(this);
+//        this.endChatProf = this.endChatProf.bind(this);
+//        this.endChatStudent = this.endChatStudent.bind(this);
+        this.handleSend = this.handleSend.bind(this);
+        // this.GetRTCIceCandidate = this.GetRTCIceCandidate.bind(this);
+        // this.GetRTCPeerConnection = this.GetRTCPeerConnection.bind(this);
+        // this.GetRTCSessionDescription = this.GetRTCSessionDescription.bind(this);
         this.handleChangePass = this.handleChangePass.bind(this);
         this.handleChangeName = this.handleChangeName.bind(this);
         this.togglePopup = this.togglePopup.bind(this);
-        this.oniceCandidate = this.oniceCandidate.bind(this);
-        this.getCam = this.getCam.bind(this);
-        this.prepareCaller =this.prepareCaller.bind(this);
+        // this.oniceCandidate = this.oniceCandidate.bind(this);
+        // this.getCam = this.getCam.bind(this);
+        // this.prepareCaller =this.prepareCaller.bind(this);
       
         // this.callUser = this.callUser.bind(this);
-        this.endCall = this.endCall.bind(this);
-        this.endCurrentCall = this.endCurrentCall.bind(this);
+        // this.endCall = this.endCall.bind(this);
+        // this.endCurrentCall = this.endCurrentCall.bind(this);
     }
-    oniceCandidate(evt){
-        if (evt.candidate) {
-            this.state.channel.trigger("client-candidate", {
-                "candidate": evt.candidate,
-                "room": this.props.chatId.match.params.id
-            });
-        }
-    }
-
-    //prompts user for permission to use camera
-    getCam(){
-        return navigator.mediaDevices.getUserMedia({
-            video:true,
-            audio:false
-        });
-    };
-
-    prepareCaller(){
-        this.state.caller.oniceCandidate = function(evt){
-            if(!evt.candidate)return;
-            console.log("onicecandidate called");
-            this.oniceCandidate(this.state.caller,evt);
-        }
-        this.state.caller.onaddstream = function(evt){
-            console.log("onaddstream called");
-            //if one view dont add new stream
-                
-            //if two view add new stream to remoteview
-                // const video = document.getElementById("remoteView");
-                // const vendorURL = window.URL || window.webkitURL;
-                // if ("srcObject" in video) {
-                //     video.srcObject = stream;
-                // } else {
-                //     video.src = window.URL.createObjectURL(stream);
-                // }
-        }
-    }
-
-    //Create and send offer to remote peer on button click
-    //should only be used if student
-    // callUser(user){
-    //     this.getCam().then((stream) => {
-    //         const video = document.getElementById("selfView");
-    //         const vendorURL = window.URL || window.webkitURL;
-    //         if ("srcObject" in video) {
-    //         video.srcObject = stream;
-    //         } else {
-    //         video.src = window.URL.createObjectURL(stream);
-    //         }
-    //         video.play();
-    //         this.state.caller.addStream(stream);
-    //         this.setState({localUserMedia:stream});
-    //         this.state.caller.createOffer().then(function(desc){
-    //             this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
-    //             this.channel.trigger("client-sdp",{
-    //                 sdp:desc,
-    //                 room:user,
-    //                 from: this.state.id
-    //             });
-    //             this.setState({room:user})
-    //         });
-    //     }).catch((error) => {
-    //         console.log(error);
-    //     })
-    // }
-
-    endCall(){
-        this.setState({room:{}});
-        this.state.caller.close();
-        for(let track of this.state.localUserMedia.getTracks()){
-            track.stop();
-        }
-        this.prepareCaller();
-
-        //redirect to chatroom page 
-        //this.toggleEndCallButton();
-    }
-
-    endCurrentCall(){
-        this.state.channel.trigger("client-endcall",{
-            room: this.props.chatId.match.params.id
-        });
-        this.endCall();
-    }
-
-    //HERE
+    
 
     togglePopup() {
         this.setState({
@@ -164,116 +81,188 @@ class TwoPersonChatStation extends React.Component{
         var PASSWORD_CORRECT = true;
         if(PASSWORD_CORRECT){
             alert("INPUT RIGHT");
-            //set up Pusher info
-            let chan = this.state.pusher.subscribe(this.props.chatId.match.params.id);
-            chan.bind('message', data => {
-                this.setState({ chats: data});
-              });
-            
-            chan.bind("pusher:subscription_succeed",members=>{
-                this.setState({usersOnline:members.count,id:this.state.channel.members.id});
-    
-                //Can use later on to display who is in chat
-                members.each(member=>{
-                    if(member.id != this.state.channel.members.me.id)
-                        this.setState({users:this.state.users.concat(member.id)});
-                });
-                //if prof
-                    //have their video show in self view
-                    // getCam().then((stream) => {
-                    //     const video = document.getElementById("selfView");
-                    //     const vendorURL = window.URL || window.webkitURL;
-                    //     if ("srcObject" in video) {
+            let chan = this.state.pusher.subscribe(this.state.room);
+        
+        chan.bind('pusher:subscription_suceeded',(members)=>{
+            this.setState({usersOnline: members.count,id:this.state.chanel.members.me.id});
+        });
+        chan.bind('pusher:member_added',(member) => {
+            //stuff
+        });
+        chan.bind('pusher:member_removed', (member) => {
+            //stuff
+        });
+
+        chan.bind('client-candidate', function(msg){
+	    console.log("client-candidate");
+            if(msg.room == this.state.room){
+                console.log("candidate received");
+                this.state.caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
+            }
+        })
+        chan.bind("client-sdp", function(msg){
+	    console.log("client-sdp");
+            if(msg.room == this.state.id){
+                console.log("sdp received");
+                // var ans = confirm("You have a call from: "+msg.from+" Would you like to answer?");
+                var ans = true;
+                if(!ans){
+                    return this.state.channel.trigger("client-reject",{"room":msg.room,"reject":this.state.id})
+                }
+                this.setState({room:msg.room});
+                var stream = this.state.localUserMedia;
+                try{
+                // this.getCam().then(stream => {
+                    // this.setState({localUserMedia:stream});
+                    // const video = document.getElementById("selfView");
+                    // const vendorURL = window.URL || window.webkitURL;
+                    // if ("srcObject" in video) {
                     //     video.srcObject = stream;
-                    //     } else {
+                    // } else {
                     //     video.src = window.URL.createObjectURL(stream);
-                    //     }
-                    //     video.play();
-                    //     caller.addStream(stream);
-                    //     this.setState({localUserMedia:stream});
-                    // })
-                    // .catch((error) => {
-                    //     console.log(error);
-                    // })
-    
-            });
-            
-            chan.bind("pusher:member_added",member => {
-                alert("NEW USER ENTERED THE CHAT");
-                this.setState({users:this.state.users.concat(member.id)});
-                //if prof
-                    //have their video show in self view
-            });
-            //if a member is removed from chat
-            chan.bind("pusher:member_removed",member=>{
-                var list = this.state.users;
-                var index = list.indexOf(member.id);
-                list.splice(index,1);
-                this.setState({users:list});
-                if(list.length == 1 && list[0] == member.id){
-                    //__________________________________________________________________________END CALL
-                    // this.endCall();
-                    console.log("END CALL");
-                }
-                //if prof left
-                    //close chat
-            });
-            chan.bind("client-candidate", function(msg){
-                if(msg.room == this.props.chatId.match.params.id){
-                    console.log("candidate received");
-                    this.state.caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
-                }
-            });
-            chan.bind("client-sdp",function(msg){
-                if(msg.room == this.props.chatId.match.params.id){
-                    console.log("sdp received");
-                    //forces a join
-                    // this.setState({room:msg.room});
-                    this.getCam().then(stream => {
-                        this.setState({localUserMedia:stream});
-                        //this.toggleEndCallButton();
-                        const video = document.getElementById("selfView");
-                        const vendorURL = window.URL || window.webkitURL;
-                        if ("srcObject" in video) {
-                            video.srcObject = stream;
-                        } else {
-                            video.src = window.URL.createObjectURL(stream);
-                        }
-                        video.play();
-                        this.caller.addStream(stream);
-                        var sessionDesc = new RTCSessionDescription(msg.sdp);
-                        this.caller.setRemoteDescription(sessionDesc);
-                        this.caller.createAnswer().then(function(sdp){
-                            this.caller.setLocalDescription(new RTCSessionDescription(sdp));
-                            this.channel.trigger("client-answer",{
-                                sdp:sdp,
-                                room: this.props.chatId.match.params.id
-                            });
+                    // }
+                    // video.play();
+                    this.state.caller.addStream(stream);
+                    var sessDesc = new RTCSessionDescription(msg.sdp);
+                    this.setState({sessionDesc:sessDesc});
+                    this.state.caller.setRemoteDescription(sessDesc);
+                    this.state.caller.createAnswer().then(function(sdp){
+                        this.state.caller.setLocalDescription(new RTCSessionDescription(sdp));
+                        this.state.channel.trigger("client-answer",{
+                            "sdp":sdp,
+                            "room":this.state.room
                         });
-                    })
-                    .catch(error => {
-                        console.log("ERROR: ",error);
-                    })
-                }
-            });
-            chan.bind("client-endcall",function(answer){
-                if(answer.room == this.props.chatId.match.params.id){
-                    console.log("Call Ended");
-                    this.endCall();
-                }
-            });
+                    });
 
-            //set up caller rtc connection
-            let call = new window.RTCPeerConnection();
+                }
+                catch(error){
+                    console.log("an error occured", error);
+                }
+            }
+        });
+        chan.bind("client-answer",function(answer){
+	    console.log("client-answer");
+            if(answer.room == this.state.room){
+                console.log("answer received");
+                this.state.caller.setRemoteDescription(new RTCSessionDescription(answer.sdp));
+            }
+        });
+        chan.bind("client-reject",function(ans){
+	    console.log("client-reject");
+            if(ans.room == this.state.room){
+                console.log("Call declined");
+                alert("Call to "+ans.rejected+" was politely declined");
+                this.endCall();
+            }
+        });
+        chan.bind("client-endcall",function(ans){
+	    console.log("client-endcall");
+            if(ans.room = this.state.room){
+                console.log("Call ended");
+                this.endCall();
+            }
+        })
 
-            this.setState({channel:chan,caller:call});
-        }
+        this.setState({channel:chan});
+
+        this.setState({caller:new window.RTCPeerConnection()});
+
+        // this.GetRTCPeerConnection();
+        // this.GetRTCSessionDescription();
+        // this.GetRTCIceCandidate();
+        // this.prepareCaller();
+        //     
       }
+    }
 
     //when the component is built set up requirments to make video chat and messaging work
     componentDidMount(){
+	let chan = this.state.pusher.subscribe(this.state.room);
+        
+        chan.bind('pusher:subscription_suceeded',(members)=>{
+	    console.log("hi");
+            this.setState({usersOnline: members.count,id:this.state.chanel.members.me.id});
+        });
+        chan.bind('pusher:member_added',(member) => {
+	    console.log("added");
+            //stuff
+        });
+        chan.bind('pusher:member_removed', (member) => {
+	    console.log("bye bye");
+            //stuff
+        });
 
-    
+        chan.bind('client-candidate', function(msg){
+	    console.log("client-candidate");
+            if(msg.room == this.state.room){
+                console.log("candidate received");
+                this.state.caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
+            }
+        })
+        chan.bind("client-sdp", function(msg){
+	    console.log("client-sdp");
+            if(msg.room == this.state.id){
+                console.log("sdp received");
+                // var ans = confirm("You have a call from: "+msg.from+" Would you like to answer?");
+                var ans = true;
+                if(!ans){
+                    return this.state.channel.trigger("client-reject",{"room":msg.room,"reject":this.state.id})
+                }
+                this.setState({room:msg.room});
+                var stream = this.state.localUserMedia;
+                try{
+                // this.getCam().then(stream => {
+                    // this.setState({localUserMedia:stream});
+                    // const video = document.getElementById("selfView");
+                    // const vendorURL = window.URL || window.webkitURL;
+                    // if ("srcObject" in video) {
+                    //     video.srcObject = stream;
+                    // } else {
+                    //     video.src = window.URL.createObjectURL(stream);
+                    // }
+                    // video.play();
+                    this.state.caller.addStream(stream);
+                    var sessDesc = new RTCSessionDescription(msg.sdp);
+                    this.setState({sessionDesc:sessDesc});
+                    this.state.caller.setRemoteDescription(sessDesc);
+                    this.state.caller.createAnswer().then(function(sdp){
+                        this.state.caller.setLocalDescription(new RTCSessionDescription(sdp));
+                        this.state.channel.trigger("client-answer",{
+                            "sdp":sdp,
+                            "room":this.state.room
+                        });
+                    });
+
+                }
+                catch(error){
+                    console.log("an error occured", error);
+                }
+            }
+        });
+        chan.bind("client-answer",function(answer){
+	    console.log("client-answer");
+            if(answer.room == this.state.room){
+                console.log("answer received");
+                this.state.caller.setRemoteDescription(new RTCSessionDescription(answer.sdp));
+            }
+        });
+        chan.bind("client-reject",function(ans){
+	    console.log("client-reject");
+            if(ans.room == this.state.room){
+                console.log("Call declined");
+                alert("Call to "+ans.rejected+" was politely declined");
+                this.endCall();
+            }
+        });
+        chan.bind("client-endcall",function(ans){
+	    console.log("client-endcall");
+            if(ans.room = this.state.room){
+                console.log("Call ended");
+                this.endCall();
+            }
+        })
+
+        this.setState({channel:chan});
     }
 
     handleTextChange(e){
@@ -294,11 +283,112 @@ class TwoPersonChatStation extends React.Component{
     handleSend(){
         //_______________________________________________________________________________________LINK HERE was http://localhost:5000
 //        axios.post("LINK HERE/message",payload);
-        const payload = {
-            username: this.state.nickname,
-            message:this.state.text
+
+        // const payload = {
+        //     username: this.state.nickname,
+        //     message:this.state.text
+        // };
+        // axios.post(process.env.REACT_APP_API_URI + "pusher/message",payload);
+
+    }
+
+    
+
+    GetRTCIceCandidate() {
+        window.RTCIceCandidate = window.RTCIceCandidate || window.webkitRTCIceCandidate ||
+            window.mozRTCIceCandidate || window.msRTCIceCandidate;
+        return window.RTCIceCandidate;
+    }
+    GetRTCPeerConnection() {
+        window.RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection ||
+            window.mozRTCPeerConnection || window.msRTCPeerConnection;
+        return window.RTCPeerConnection;
+    }
+    GetRTCSessionDescription() {
+        window.RTCSessionDescription = window.RTCSessionDescription || window.webkitRTCSessionDescription ||
+            window.mozRTCSessionDescription || window.msRTCSessionDescription;
+        return window.RTCSessionDescription;
+    }
+    prepareCaller(){
+        // this.setState({caller:new window.RTCPeerConnection()});
+        this.state.caller.onicecandidate = function(evt){
+            if(!evt.candidate) return;
+            console.log("onicecandidate called");
+            this.onIceCandidate(this.state.caller,evt);
         };
-        axios.post(process.env.REACT_APP_API_URI + "pusher/message",payload);
+        this.state.caller.onaddstream = function(evt){
+            console.log("onaddstream called");
+            const video = document.getElementById("remoteView");
+            const vendorURL = window.URL || window.webkitURL;
+            if ("srcObject" in video) {
+                video.srcObject = evt.stream;
+            } else {
+                video.src = window.URL.createObjectURL(evt.stream);
+            }
+            video.play();
+        }
+    }
+    getCam(){
+        return navigator.mediaDevices.getUserMedia({
+            video:true,
+            audio:false
+        });
+    }
+    callUser(user){
+        var stream = this.state.localUserMedia;
+        try{
+        // this.getCam().then(stream => {
+           /* const video = document.getElementById("selfView");
+            const vendorURL = window.URL || window.webkitURL;
+            if ("srcObject" in video) {
+                video.srcObject = stream;
+            } else {
+                video.src = window.URL.createObjectURL(stream);
+            }
+            video.play();*/
+            this.state.caller.addStream(stream);
+            // this.setState({localUserMedia:stream});
+
+            this.state.caller.createOffer().then(function(desc){
+                this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
+                this.state.channel.trigger("client-sdp",{
+                    "sdp": desc,
+                    "room":user,
+                    "from":this.state.id
+                });
+                this.setState({room:user});
+            })
+        }
+        catch(error) {
+            console.log('an error occured',error);
+        }
+
+    }
+
+    endCall(){
+        this.setState({room:undefined});
+        this.state.caller.close();
+        // this.state.localUserMedia.stop();
+        // for(let t of this.state.localUserMedia.getTracks()){t.stop();}
+
+        this.prepareCaller();
+    }
+
+    onIceCandidate(peer,evt){
+        if(evt.candidate){
+            this.state.channel.trigger("client-candidate",{
+                "candidate":evt.candidate,
+                "room":this.state.room
+            });
+        }
+    }
+    
+    handleChangeName(e){
+        this.setState({nickname:e.target.value});
+    }
+
+    handleChangePass(e){
+        this.setState({inputPassword:e.target.value});
     }
 
     turnOnCamera(){
@@ -311,76 +401,24 @@ class TwoPersonChatStation extends React.Component{
             video.src = window.URL.createObjectURL(stream);
             }
             video.play();
-            this.state.caller.addStream(stream);
+            // this.state.caller.addStream(stream);
             this.setState({localUserMedia:stream});
-            this.state.caller.createOffer().then(function(desc){
-                this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
-                this.channel.trigger("client-sdp",{
-                    sdp:desc,
-                    room:this.props.chatId.match.params.id,
-                    from: this.state.id
-                });
-                this.setState({room:this.props.chatId.match.params.id})
-            });
+            // this.state.caller.createOffer().then(function(desc){
+            //     this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
+            //     this.channel.trigger("client-sdp",{
+            //         sdp:desc,
+            //         room:this.props.chatId.match.params.id,
+            //         from: this.state.id
+            //     });
+            //     this.setState({room:this.props.chatId.match.params.id})
+            // });
         }).catch((error) => {
             console.log(error);
         })
-    }
-
-  
-    GetRTCIceCandidate() {
-        window.RTCIceCandidate =
-          window.RTCIceCandidate ||
-          window.webkitRTCIceCandidate ||
-          window.mozRTCIceCandidate ||
-          window.msRTCIceCandidate;
-  
-        return window.RTCIceCandidate;
-    }
-  
-    GetRTCPeerConnection() {
-        window.RTCPeerConnection =
-          window.RTCPeerConnection ||
-          window.webkitRTCPeerConnection ||
-          window.mozRTCPeerConnection ||
-          window.msRTCPeerConnection;
-        return window.RTCPeerConnection;
-    }
-  
-    GetRTCSessionDescription() {
-        window.RTCSessionDescription =
-          window.RTCSessionDescription ||
-          window.webkitRTCSessionDescription ||
-          window.mozRTCSessionDescription ||
-          window.msRTCSessionDescription;
-        return window.RTCSessionDescription;
-    }
-
-    endChatProf(){
-        //if professor
-            //end entire chat
-        //if student
-            
-
-    }
-    endChatStudent(){
-        //just leave chat
-            //alert users student left with message
-            // const payload = {
-            //     username: this.state.username,
-            //     message:"left chat"
-            // };
-            // //SEND MESSAGE
-            // //_______________________________________________________________________________________LINK HERE was http://localhost:5000
-            // axios.post("LINK HERE/message",payload);
-    }
-
-    handleChangeName(e){
-        this.setState({nickname:e.target.value});
-    }
-
-    handleChangePass(e){
-        this.setState({inputPassword:e.target.value});
+        this.GetRTCPeerConnection();
+        this.GetRTCSessionDescription();
+        this.GetRTCIceCandidate();
+        this.prepareCaller();
     }
 
     render(){
