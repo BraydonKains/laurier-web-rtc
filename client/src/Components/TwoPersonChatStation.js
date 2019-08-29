@@ -109,15 +109,15 @@ class TwoPersonChatStation extends React.Component{
                 }
                 this.setState({room:msg.room});
                 this.getCam().then(stream => {
-                    this.setState({localUserMedia:stream});
-                    const video = document.getElementById("selfView");
-                    const vendorURL = window.URL || window.webkitURL;
-                    if ("srcObject" in video) {
-                        video.srcObject = stream;
-                    } else {
-                        video.src = window.URL.createObjectURL(stream);
-                    }
-                    video.play();
+                    // this.setState({localUserMedia:stream});
+                    // const video = document.getElementById("selfView");
+                    // const vendorURL = window.URL || window.webkitURL;
+                    // if ("srcObject" in video) {
+                    //     video.srcObject = stream;
+                    // } else {
+                    //     video.src = window.URL.createObjectURL(stream);
+                    // }
+                    // video.play();
                     this.state.caller.addStream(stream);
                     var sessDesc = new RTCSessionDescription(msg.sdp);
                     this.setState({sessionDesc:sessDesc});
@@ -274,7 +274,8 @@ class TwoPersonChatStation extends React.Component{
     endCall(){
         this.setState({room:undefined});
         this.state.caller.close();
-        for(let t of this.state.localUserMedia.getTracks()){t.stop();}
+        // this.state.localUserMedia.stop();
+        // for(let t of this.state.localUserMedia.getTracks()){t.stop();}
         this.prepareCaller();
     }
 
