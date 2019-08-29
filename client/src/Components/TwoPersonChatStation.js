@@ -81,7 +81,7 @@ class TwoPersonChatStation extends React.Component{
         var PASSWORD_CORRECT = true;
         if(PASSWORD_CORRECT){
             alert("INPUT RIGHT");
-            let chan = this.state.pusher.subscribe('presence-videocall');
+            let chan = this.state.pusher.subscribe(this.state.room);
         
         chan.bind('pusher:subscription_suceeded',(members)=>{
             this.setState({usersOnline: members.count,id:this.state.chanel.members.me.id});
