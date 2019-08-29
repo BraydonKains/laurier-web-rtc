@@ -5,7 +5,7 @@ import axios from 'axios';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import Pusher from 'pusher';
+import Pusher from 'pusher-js';
 import ReactDom from 'react-dom';
 import Popup from 'react-popup';
 
@@ -17,6 +17,7 @@ ReactDom.render(
   document.getElementById('root')
 );
 
+
 Popup.alert('I am alert, nice to meet you');
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -26,14 +27,16 @@ ReactDOM.render(<App />, document.getElementById('root'));
 serviceWorker.unregister();
 
 
+/*
+var pusher = new Pusher('ba473cb312963eb9be6a', {
+    cluster: 'us2',// process.env.REACT_APP_PUSHER_CLUSTER,
+    forceTLS: true,
+    authEndpoint: "pusher/auth"
+  });
+console.log(pusher);
 
-// var pusher = new Pusher("XXX-API-KEY", {
-//     cluster: "XXX-API-CLUSTER",
-//     encrypted: true,
-//     authEndpoint: "pusher/auth"
-//   });
-// const a = pusher.subscribe("presence-videocall");
-// const channel = pusher.subscribe("presence-videocall");
+const a = pusher.subscribe("presence-videocall");
+const channel = pusher.subscribe("presence-videocall");
 
 function GetRTCIceCandidate() {
     window.RTCIceCandidate =
@@ -63,33 +66,33 @@ function GetRTCIceCandidate() {
     return window.RTCSessionDescription;
   }
 
-  // function onIceCandidate(evt){
-  //   if (evt.candidate) {
-  //       channel.trigger("client-candidate", {
-  //           "candidate": evt.candidate,
-  //           "room": this.state. room
-  //       });
-  //   }
-  // }
+  function onIceCandidate(evt){
+    if (evt.candidate) {
+        channel.trigger("client-candidate", {
+            "candidate": evt.candidate,
+            "room": this.state. room
+        });
+    }
+  }
 
-  // function prepareCaller() {
-  //   //Initializing a peer connection
-  //   var caller = new window.RTCPeerConnection();
-  //   //Listen for ICE Candidates and send them to remote peers
-  //   caller.onicecandidate = function(evt) {
-  //     if (!evt.candidate) return;
-  //     console.log("onicecandidate called");
-  //     onIceCandidate(caller, evt);
-  //   };
-  //   //onaddstream handler to receive remote feed and show in remoteview video element
-  //   caller.onaddstream = function(evt) {
-  //     console.log("onaddstream called");
-  //     if (window.URL) {
-  //       document.getElementById("remoteview").src = window.URL.createObjectURL(
-  //         evt.stream
-  //       );
-  //     } else {
-  //       document.getElementById("remoteview").src = evt.stream;
-  //     }
-  //   };
-  // }
+  function prepareCaller() {
+    //Initializing a peer connection
+    var caller = new window.RTCPeerConnection();
+    //Listen for ICE Candidates and send them to remote peers
+    caller.onicecandidate = function(evt) {
+      if (!evt.candidate) return;
+      console.log("onicecandidate called");
+      onIceCandidate(caller, evt);
+    };
+    //onaddstream handler to receive remote feed and show in remoteview video element
+    caller.onaddstream = function(evt) {
+      console.log("onaddstream called");
+      if (window.URL) {
+        document.getElementById("remoteview").src = window.URL.createObjectURL(
+          evt.stream
+        );
+      } else {
+        document.getElementById("remoteview").src = evt.stream;
+      }
+    };
+  }*/

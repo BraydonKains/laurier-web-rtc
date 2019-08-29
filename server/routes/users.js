@@ -37,7 +37,8 @@ router.post("/delete/:id", async function(req, res, next) {
 });
 
 router.post("/login", passport.authenticate('local'), function(req, res) {
-    res.sendStatus(JSON.stringify(200));
+    console.log(req.user);
+    res.send(JSON.stringify(req.user));
 });
 
 module.exports = router;

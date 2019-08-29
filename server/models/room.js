@@ -3,6 +3,7 @@ const pool = require("../pool.js");
 class Room {
     constructor() {
 	this.id = null;
+	this.name = null;
 	this.owner_id = null;
 	this.capacity = null;
 	this.room_type = null;
@@ -21,6 +22,7 @@ class Room {
 		this.open = res.rows[0].open;
 		this.room_type = res.rows[0].room_type;
 		this.password = res.rows[0].password;
+		this.name = res.rows[0].name;
 	    }
 	} catch(err) {
 	    console.log(err);
@@ -58,7 +60,7 @@ class Room {
     async commit() {
 	var success = false;
 	try {
-	    const res = await pool.query("INSERT INTO rooms (owner_id, capacity, room_type, password, open) VALUES ($1, $2, $3, $4, $5)", [this.owner_id, this.capacity, this.room_type, this.password, this.open]);
+	    const res = await pool.query("INSERT INTO rooms (owner_id, capacity, room_type, password, open, name) VALUES ($1, $2, $3, $4, $5, $6)", [this.owner_id, this.capacity, this.room_type, this.password, this.open, this.name]);
 	    success = "created";
 	} catch(err) {
 	    console.log(err);
