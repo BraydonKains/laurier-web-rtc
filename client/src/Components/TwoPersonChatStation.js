@@ -43,6 +43,7 @@ class TwoPersonChatStation extends React.Component{
         this.GetRTCSessionDescription = this.GetRTCSessionDescription.bind(this);
         this.prepareCaller = this.prepareCaller.bind(this);
         this.getCam = this.getCam.bind(this);
+	this.turnOnCamera = this.turnOnCamera(this);
         this.callUser = this.callUser.bind(this);
         this.endCall = this.endCall.bind(this);
         this.onIceCandidate = this.onIceCandidate.bind(this);
@@ -50,8 +51,8 @@ class TwoPersonChatStation extends React.Component{
         // this.turnOnCamera = this.turnOnCamera.bind(this);
 
         this.handleTextChange = this.handleTextChange.bind(this);
-        this.endChatProf = this.endChatProf.bind(this);
-        this.endChatStudent = this.endChatStudent.bind(this);
+//        this.endChatProf = this.endChatProf.bind(this);
+//        this.endChatStudent = this.endChatStudent.bind(this);
         this.handleSend = this.handleSend.bind(this);
         // this.GetRTCIceCandidate = this.GetRTCIceCandidate.bind(this);
         // this.GetRTCPeerConnection = this.GetRTCPeerConnection.bind(this);
