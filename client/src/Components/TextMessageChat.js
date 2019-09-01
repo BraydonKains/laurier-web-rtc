@@ -8,7 +8,7 @@ export default({chats,text,username,handleChange,handleSend}) =>{
             <div className="messageDisplay mb-2">
                 <ul>
                     {chats.map(chat => {
-                        return chat;
+                        return <li>{chat}</li>;
                     })}
                 </ul>
             </div>
