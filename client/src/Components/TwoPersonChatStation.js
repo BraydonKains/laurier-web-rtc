@@ -8,7 +8,6 @@ import TwoVideoChat from './TwoVideoChat';
 import ButtonPanel from './ButtonPanel';
 import NavBar from './NavBar';
 import UserLoginPrompt from './UserLoginPrompt';
-// import { threadId } from 'worker_threads';
 
 class TwoPersonChatStation extends React.Component{
     constructor(props){
@@ -47,32 +46,18 @@ class TwoPersonChatStation extends React.Component{
         this.GetRTCSessionDescription = this.GetRTCSessionDescription.bind(this);
         this.prepareCaller = this.prepareCaller.bind(this);
         this.getCam = this.getCam.bind(this);
-	this.turnOnCamera = this.turnOnCamera(this);
+	    this.turnOnCamera = this.turnOnCamera(this);
         this.callUser = this.callUser.bind(this);
         this.endCall = this.endCall.bind(this);
         this.onIceCandidate = this.onIceCandidate.bind(this);
 
-        // this.turnOnCamera = this.turnOnCamera.bind(this);
 
         this.handleTextChange = this.handleTextChange.bind(this);
-//        this.endChatProf = this.endChatProf.bind(this);
-//        this.endChatStudent = this.endChatStudent.bind(this);
         this.handleSend = this.handleSend.bind(this);
-        // this.GetRTCIceCandidate = this.GetRTCIceCandidate.bind(this);
-        // this.GetRTCPeerConnection = this.GetRTCPeerConnection.bind(this);
-        // this.GetRTCSessionDescription = this.GetRTCSessionDescription.bind(this);
         this.handleChangePass = this.handleChangePass.bind(this);
         this.handleChangeName = this.handleChangeName.bind(this);
         this.togglePopup = this.togglePopup.bind(this);
         
-
-        // this.oniceCandidate = this.oniceCandidate.bind(this);
-        // this.getCam = this.getCam.bind(this);
-        // this.prepareCaller =this.prepareCaller.bind(this);
-      
-        // this.callUser = this.callUser.bind(this);
-        // this.endCall = this.endCall.bind(this);
-        // this.endCurrentCall = this.endCurrentCall.bind(this);
     }
     
 
@@ -81,11 +66,8 @@ class TwoPersonChatStation extends React.Component{
           showPopup: !this.state.showPopup
         });
         //CHECK LOGIN INFO AND REQUEST
-        // alert("TOGGLE DONE");
         var PASSWORD_CORRECT = true;
         if(PASSWORD_CORRECT){
-            // alert("INPUT RIGHT");
-            // console.log("presence-"+this.state.room);
             let chan = this.state.pusher.subscribe(this.state.room);
 
             this.state.pusher.connection.bind('connected', function() {
@@ -94,7 +76,6 @@ class TwoPersonChatStation extends React.Component{
 
             chan.bind('message', data => {
                 let chatEntry = data.username+": "+data.message;
-                alert(chatEntry);
                 this.setState({ chats: [...this.state.chats, chatEntry]});
                 console.log(this.state.chats);
             });
@@ -224,18 +205,7 @@ class TwoPersonChatStation extends React.Component{
     }
 
     handleTextChange(e){
-        // if(e.keyCode === 13){
-        //     const payload = {
-        //         username: this.state.username,
-        //         message:this.state.text
-        //     };
-        //     //SEND MESSAGE
-        //     //_______________________________________________________________________________________LINK HERE was http://localhost:5000
-        //     axios.post(process.env.REACT_APP_API_URI + "pusher/message",payload);
-        // }
-        // else{
-            this.setState({text: e.target.value});
-        // }
+        this.setState({text: e.target.value});
     }
 
     handleSend(){
@@ -243,9 +213,7 @@ class TwoPersonChatStation extends React.Component{
             username: this.state.nickname,
             message:this.state.text,
         };
-        alert(this.state.room);
         axios.post(process.env.REACT_APP_API_URI+'pusher/message',{payload,room_id:this.state.room});
-        alert("DONE");
 
     }
 
