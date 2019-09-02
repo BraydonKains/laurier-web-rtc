@@ -17,7 +17,7 @@ class TwoPersonChatStation extends React.Component{
             pusher: new Pusher('ba473cb312963eb9be6a', {
 	    cluster: 'us2',
 	    forceTLS: true,
-	    authEndpoint: "pusher/auth"
+	    authEndpoint: process.env.REACT_APP_API_URI+"pusher/auth"
             }),
             channel:{},
             usersOnline:{},
@@ -68,7 +68,7 @@ class TwoPersonChatStation extends React.Component{
         //CHECK LOGIN INFO AND REQUEST
         var PASSWORD_CORRECT = true;
         if(PASSWORD_CORRECT){
-            let chan = this.state.pusher.subscribe(this.state.room);
+            let chan = this.state.pusher.subscribe("presence-" + this.state.room);
 
             this.state.pusher.connection.bind('connected', function() {
                 alert("SOME CONNECTING WAS DONE");

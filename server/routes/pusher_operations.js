@@ -28,7 +28,7 @@ router.post('/message', function(req, res, next) {
 //   pusher.trigger('')
 // })
 
-router.post("/pusher/auth", (req, res) => {
+router.post("/auth", (req, res) => {
   const socketId = req.body.socket_id;
   const channel = req.body.channel_name;
   var presenceData = {
