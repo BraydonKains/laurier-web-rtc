@@ -17,10 +17,10 @@ router.post('/message', function(req, res, next) {
   res.send(payload);
 });
 
-router.post('/test',function(req,res){
-  pusher.trigger(req.body.room_id,'test',payload);
-  res.send(req.body.payload);
-})
+// router.post('/test',function(req,res){
+//   pusher.trigger(req.body.room_id,'test',payload);
+//   res.send(req.body.payload);
+// })
 
 // router.post('/client')
 

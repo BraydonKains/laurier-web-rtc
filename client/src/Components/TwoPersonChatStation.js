@@ -8,6 +8,7 @@ import TwoVideoChat from './TwoVideoChat';
 import ButtonPanel from './ButtonPanel';
 import NavBar from './NavBar';
 import UserLoginPrompt from './UserLoginPrompt';
+// import { threadId } from 'worker_threads';
 
 class TwoPersonChatStation extends React.Component{
     constructor(props){
@@ -84,8 +85,8 @@ class TwoPersonChatStation extends React.Component{
         var PASSWORD_CORRECT = true;
         if(PASSWORD_CORRECT){
             // alert("INPUT RIGHT");
-            console.log("presence-"+this.state.room);
-            let chan = this.state.pusher.subscribe("presence-"+this.state.room);
+            // console.log("presence-"+this.state.room);
+            let chan = this.state.pusher.subscribe(this.state.room);
 
             this.state.pusher.connection.bind('connected', function() {
                 alert("SOME CONNECTING WAS DONE");
@@ -99,8 +100,10 @@ class TwoPersonChatStation extends React.Component{
             });
 
             chan.bind('pusher:subscription_succeeded', function(members) {
-                
-                chan.trigger("client-test",{"type":"test",})
+                // alert("HAVE NOT PASSED LINE");
+                // axios.get("http://localhost:4000/message");
+                // alert("JUST PASSED LINE");
+                // chan.trigger("client-test",{"type":"test",})
 
                 //add self to connection
                 // this.state.caller.addStream(stream);
@@ -236,14 +239,13 @@ class TwoPersonChatStation extends React.Component{
     }
 
     handleSend(){
-        //_______________________________________________________________________________________LINK HERE was http://localhost:5000
-//        axios.post("LINK HERE/message",payload);
-
         const payload = {
             username: this.state.nickname,
-            message:this.state.text
+            message:this.state.text,
         };
-        axios.post(process.env.REACT_APP_API_URI + "pusher/message",payload);
+        alert(this.state.room);
+        axios.post(process.env.REACT_APP_API_URI+'pusher/message',{payload,room_id:this.state.room});
+        alert("DONE");
 
     }
 
