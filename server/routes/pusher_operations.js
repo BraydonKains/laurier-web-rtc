@@ -12,22 +12,38 @@ const pusher = new Pusher({
     
 /* GET home page. */
 router.post('/message', function(req, res, next) {
-    const payload = req.body;
-    pusher.trigger('chat', 'message', payload);
-    res.send(payload);
+  const payload = req.body.payload;
+  pusher.trigger(req.body.room_id, 'message', payload);
+  res.send(payload);
 });
 
-router.post("/auth", (req, res) => {
+// router.post('/test',function(req,res){
+//   pusher.trigger(req.body.room_id,'test',payload);
+//   res.send(req.body.payload);
+// })
+
+// router.post('/client')
+
+// router.post("/TESTING",function(req,res){
+//   pusher.trigger('')
+// })
+
+router.post("/pusher/auth", (req, res) => {
   const socketId = req.body.socket_id;
   const channel = req.body.channel_name;
   var presenceData = {
 	      user_id:
-		Math.random()
-		  .toString(36)
-		  .slice(2) + Date.now()
+          Math.random()
+            .toString(36)
+            .slice(2) + Date.now()
 	    };
   const auth = pusher.authenticate(socketId, channel, presenceData);
+
+  // var auth = JSON.stringify(pusher.authenticate(socketId, channel, presenceData));
+
   res.send(auth);
 });
+
+
 
 module.exports = router;
