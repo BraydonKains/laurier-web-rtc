@@ -30,7 +30,8 @@ class HomePage extends React.Component {
 
     roomVal:"",
     passwordVal:"",
-    typeVal:"0"
+    typeVal:"0",
+    new_room_id: 0
   }
 
   constructor(props) {
@@ -64,6 +65,29 @@ class HomePage extends React.Component {
 
     createRoom() {
 	this.closeModal();
+
+	let room_data = {
+	    name: this.state.roomVal,
+	    password: this.state.passwordVal,
+	    room_type: "1",
+	    user_id: this.props.location.user_id
+	};
+	fetch(process.env.REACT_APP_API_URI + "rooms/create", {
+	    method: "POST",
+	    mode: "cors",
+	    cache: "no-cache",
+	    headers: {
+		'Content-Type': 'application/json',
+	    },
+	    body: JSON.stringify(room_data) 
+	})
+	.then(res => res.json())
+	.then(res => {
+	    this.setState({new_room_id: res.room_id, redirect: true});
+	})
+	.catch(err => {
+	    console.log(err);
+	});
     }
 
   handleRoomChange(event){
@@ -83,6 +107,16 @@ class HomePage extends React.Component {
   }
 
   render() {
+    if (this.state.redirect) {
+	return <Redirect push to={{
+	    pathname: '/rooms/'+this.state.new_room_id,
+	    state: {
+		user_id: this.props.location.user_id,
+		username: this.props.location.username
+	    }
+	}}
+	/>
+    }
       return (
         <div> 
             <NavBar menu={this.state.menu} />

@@ -29,10 +29,10 @@ class TwoPersonChatStation extends React.Component{
             localUserMedia:{},
             room:this.props.match.params.id,
 
-            showPopup:true,
+            showPopup: typeof this.props.location.state === "undefined",
 
             text: '',
-            username: '',
+            username: typeof this.props.location.state !== "undefined" ? this.props.location.state.username : '',
             chats: [],
 
             nickname:{},
@@ -65,8 +65,30 @@ class TwoPersonChatStation extends React.Component{
         this.setState({
           showPopup: !this.state.showPopup
         });
-        //CHECK LOGIN INFO AND REQUEST
-        var PASSWORD_CORRECT = true;
+        var PASSWORD_CORRECT;
+
+	let password_attempt = {
+	    password: this.state.passwordVal,
+	    room_type: "1",
+	    user_id: this.props.location.user_id
+	};
+	fetch(process.env.REACT_APP_API_URI + "rooms/create", {
+	    method: "POST",
+	    mode: "cors",
+	    cache: "no-cache",
+	    headers: {
+		'Content-Type': 'application/json',
+	    },
+	    body: JSON.stringify(room_data) 
+	})
+	.then(res => res.json())
+	.then(res => {
+	    this.setState({new_room_id: res.room_id, redirect: true});
+	})
+	.catch(err => {
+	    console.log(err);
+	});
+
         if(PASSWORD_CORRECT){
             let chan = this.state.pusher.subscribe("presence-" + this.state.room);
 
