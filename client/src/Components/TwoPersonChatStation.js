@@ -35,8 +35,8 @@ class TwoPersonChatStation extends React.Component{
             username: typeof this.props.location.state !== "undefined" ? this.props.location.state.username : '',
             chats: [],
 
-            nickname:{},
-            inputPassword:{},
+            nickname: '',
+            inputPassword: '',
             menu: [1, 5]
 
         }
@@ -65,12 +65,11 @@ class TwoPersonChatStation extends React.Component{
         this.setState({
           showPopup: !this.state.showPopup
         });
-        var PASSWORD_CORRECT;
+        var PASSWORD_CORRECT = false;
 
 	let password_attempt = {
-	    password: this.state.passwordVal,
-	    room_type: "1",
-	    user_id: this.props.location.user_id
+	    room_id: this.match.params.id,
+	    password: this.state.inputPassword
 	};
 	fetch(process.env.REACT_APP_API_URI + "rooms/create", {
 	    method: "POST",
@@ -79,11 +78,11 @@ class TwoPersonChatStation extends React.Component{
 	    headers: {
 		'Content-Type': 'application/json',
 	    },
-	    body: JSON.stringify(room_data) 
+	    body: JSON.stringify(password_attempt) 
 	})
 	.then(res => res.json())
 	.then(res => {
-	    this.setState({new_room_id: res.room_id, redirect: true});
+	    PASSWORD_CORRECT = true;
 	})
 	.catch(err => {
 	    console.log(err);
