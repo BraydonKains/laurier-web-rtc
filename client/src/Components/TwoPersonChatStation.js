@@ -64,6 +64,8 @@ class TwoPersonChatStation extends React.Component{
     
     offerCreation(desc){
         this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
+	console.log("desc");
+	console.log(desc);
         this.state.channel.trigger("client-sdp",{
             "sdp": desc,
             "room":this.state.room,
@@ -109,9 +111,7 @@ class TwoPersonChatStation extends React.Component{
             });
 
             let k = function(msg){
-                console.log("client-candidate");
-                if(msg.room == this.state.room){
-                    console.log("candidate received");
+                if(msg.candidate.candidate !== '' && msg.room == this.state.room){
                     this.state.caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
                 }
             }.bind(this);
@@ -126,7 +126,9 @@ class TwoPersonChatStation extends React.Component{
             })
             let a = function(msg){
                 console.log("client-sdp");
-                if(msg.room == this.state.id){
+		console.log(msg);
+		console.log(this.props.match.params.id);
+                if(msg.room == this.props.match.params.id){
                     console.log("sdp received");
                     // var ans = confirm("You have a call from: "+msg.from+" Would you like to answer?");
                     var ans = true;
@@ -271,7 +273,18 @@ class TwoPersonChatStation extends React.Component{
 
             this.setState({channel:chan});
 
-            let call = new window.RTCPeerConnection()
+            let call = new window.RTCPeerConnection({
+		iceServers: [
+		    {
+			urls: "stun:stunserver.example.org"
+		    },
+		    {
+			url: 'turn:192.158.29.39:3478?transport=udp',
+			credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+			username: '28224511:1379330808'
+		    }
+		]
+	    });
 
             // this.setState({caller:new window.RTCPeerConnection()});
 
@@ -426,7 +439,7 @@ class TwoPersonChatStation extends React.Component{
 
 
     onIceCandidate(peer,evt){
-        if(evt.candidate){
+        if(evt.candidate && evt.candidate.candidate !== ''){
             this.state.channel.trigger("client-candidate",{
                 "candidate":evt.candidate,
                 "room":this.state.room
