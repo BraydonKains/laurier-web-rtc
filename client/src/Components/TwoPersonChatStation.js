@@ -63,12 +63,12 @@ class TwoPersonChatStation extends React.Component{
     }
     
     offerCreation(desc){
-    this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
-    this.state.channel.trigger("client-sdp",{
-    "sdp": desc,
-    "room":this.state.room,
-    "from":this.state.id
-    });
+        this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
+        this.state.channel.trigger("client-sdp",{
+            "sdp": desc,
+            "room":this.state.room,
+            "from":this.state.id
+        });
     }
 
     togglePopup() {
@@ -78,234 +78,237 @@ class TwoPersonChatStation extends React.Component{
         //CHECK LOGIN INFO AND REQUEST
         var PASSWORD_CORRECT = true;
         if(PASSWORD_CORRECT){
-        let chan = this.state.pusher.subscribe("presence-" + this.state.room);
+            let chan = this.state.pusher.subscribe("presence-" + this.state.room);
 
-        this.state.pusher.connection.bind('connected', function() {
-            alert("SOME CONNECTING WAS DONE");
-        });
+            this.state.pusher.connection.bind('connected', function() {
+                // alert("SOME CONNECTING WAS DONE");
+            });
 
-        chan.bind('message', data => {
-            let chatEntry = data.username+": "+data.message;
-            this.setState({ chats: [...this.state.chats, chatEntry]});
-            console.log(this.state.chats);
-        });
+            chan.bind('message', data => {
+                alert("GOT MESSAGE");
+                let chatEntry = data.username+": "+data.message;
+                this.setState({ chats: [...this.state.chats, chatEntry]});
+                console.log(this.state.chats);
+            });
 
-        chan.bind('pusher:subscription_succeeded', function(members) {
+            chan.bind('pusher:subscription_succeeded', function(members) {
 
-            //stuff
+                //stuff
 
-        }.bind(this));
-        chan.bind('pusher:member_added',(member) => {
-            alert("SOMEONE IS HERE WITH US");
+            }.bind(this));
+            chan.bind('pusher:member_added',(member) => {
+                // alert("SOMEONE IS HERE WITH US");
 
-            this.callUser(member.id)
+                this.callUser(member.id)
 
 
-            //stuff
-        });
-        chan.bind('pusher:member_removed', (member) => {
-            //stuff
-        });
+                //stuff
+            });
+            chan.bind('pusher:member_removed', (member) => {
+                //stuff
+            });
 
-        let k = function(msg){
-            console.log("client-candidate");
-            if(msg.room == this.state.room){
-                console.log("candidate received");
-                this.state.caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
-            }
-        }.bind(this);
-
-        chan.bind('client-candidate', function(msg){
-            k(msg);
-            // console.log("client-candidate");
-            // if(msg.room == this.state.room){
-            // console.log("candidate received");
-            // this.state.caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
-            // }
-        })
-        let a = function(msg){
-            console.log("client-sdp");
-            if(msg.room == this.state.id){
-                console.log("sdp received");
-                // var ans = confirm("You have a call from: "+msg.from+" Would you like to answer?");
-                var ans = true;
-                if(!ans){
-                return this.state.channel.trigger("client-reject",{"room":msg.room,"reject":this.state.id})
+            let k = function(msg){
+                console.log("client-candidate");
+                if(msg.room == this.state.room){
+                    console.log("candidate received");
+                    this.state.caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
                 }
-                this.setState({room:msg.room});
-                var stream = this.state.localUserMedia;
-                let b = function(stream){
-                this.setState({localUserMedia:stream});
-                const video = document.getElementById("selfView");
+            }.bind(this);
+
+            chan.bind('client-candidate', function(msg){
+                k(msg);
+                // console.log("client-candidate");
+                // if(msg.room == this.state.room){
+                // console.log("candidate received");
+                // this.state.caller.addIceCandidate(new RTCIceCandidate(msg.candidate));
+                // }
+            })
+            let a = function(msg){
+                console.log("client-sdp");
+                if(msg.room == this.state.id){
+                    console.log("sdp received");
+                    // var ans = confirm("You have a call from: "+msg.from+" Would you like to answer?");
+                    var ans = true;
+                    if(!ans){
+                    return this.state.channel.trigger("client-reject",{"room":msg.room,"reject":this.state.id})
+                    }
+                    this.setState({room:msg.room});
+                    var stream = this.state.localUserMedia;
+                    let b = function(stream){
+                        this.setState({localUserMedia:stream});
+                        const video = document.getElementById("selfView");
+                        const vendorURL = window.URL || window.webkitURL;
+                        if ("srcObject" in video) {
+                            video.srcObject = stream;
+                        } else {
+                            video.src = window.URL.createObjectURL(stream);
+                        }
+                        video.play();
+                        this.state.caller.addStream(stream);
+                        var sessDesc = new RTCSessionDescription(msg.sdp);
+                        this.setState({sessionDesc:sessDesc});
+                        alert("SETTING REMOTE DESCRIPTION 1")
+                        this.state.caller.setRemoteDescription(sessDesc);
+                        let c = function(sdp){
+                            this.state.caller.setLocalDescription(new RTCSessionDescription(sdp));
+                            this.state.channel.trigger("client-answer",{
+                                "sdp":sdp,
+                                "room":this.state.room
+                            });
+                        }.bind(this);
+                        this.state.caller.createAnswer().then(function(sdp){
+                            c(sdp)
+                            // this.state.caller.setLocalDescription(new RTCSessionDescription(sdp));
+                            // this.state.channel.trigger("client-answer",{
+                            // "sdp":sdp,
+                            // "room":this.state.room
+                            // });
+                        });
+                    }.bind(this);
+                    this.getCam().then(stream => {
+                        b(stream);
+                        // this.setState({localUserMedia:stream});
+                        // const video = document.getElementById("selfView");
+                        // const vendorURL = window.URL || window.webkitURL;
+                        // if ("srcObject" in video) {
+                        // video.srcObject = stream;
+                        // } else {
+                        // video.src = window.URL.createObjectURL(stream);
+                        // }
+                        // video.play();
+                        // this.state.caller.addStream(stream);
+                        // var sessDesc = new RTCSessionDescription(msg.sdp);
+                        // this.setState({sessionDesc:sessDesc});
+                        // this.state.caller.setRemoteDescription(sessDesc);
+                        // this.state.caller.createAnswer().then(function(sdp){
+                        // this.state.caller.setLocalDescription(new RTCSessionDescription(sdp));
+                        // this.state.channel.trigger("client-answer",{
+                        // "sdp":sdp,
+                        // "room":this.state.room
+                        // });
+                        // });
+
+                    })
+                    .catch(error=>{
+                        console.log("an error occured", error);
+                    })
+                }
+            }.bind(this);
+            chan.bind("client-sdp", function(msg){
+                a(msg);
+            // console.log("client-sdp");
+            // if(msg.room == this.state.id){
+            // console.log("sdp received");
+            // // var ans = confirm("You have a call from: "+msg.from+" Would you like to answer?");
+            // var ans = true;
+            // if(!ans){
+            // return this.state.channel.trigger("client-reject",{"room":msg.room,"reject":this.state.id})
+            // }
+            // this.setState({room:msg.room});
+            // var stream = this.state.localUserMedia;
+            // this.getCam().then(stream => {
+            // this.setState({localUserMedia:stream});
+            // const video = document.getElementById("selfView");
+            // const vendorURL = window.URL || window.webkitURL;
+            // if ("srcObject" in video) {
+            // video.srcObject = stream;
+            // } else {
+            // video.src = window.URL.createObjectURL(stream);
+            // }
+            // video.play();
+            // this.state.caller.addStream(stream);
+            // var sessDesc = new RTCSessionDescription(msg.sdp);
+            // this.setState({sessionDesc:sessDesc});
+            // this.state.caller.setRemoteDescription(sessDesc);
+            // this.state.caller.createAnswer().then(function(sdp){
+            // this.state.caller.setLocalDescription(new RTCSessionDescription(sdp));
+            // this.state.channel.trigger("client-answer",{
+            // "sdp":sdp,
+            // "room":this.state.room
+            // });
+            // });
+
+            // })
+            // .catch(error=>{
+            // console.log("an error occured", error);
+            // })
+            // }
+            });
+
+            let d = function(answer){
+                console.log("client-answer");
+                if(answer.room == this.state.room){
+                    console.log("answer received");
+                    alert("Setting REMOTE DESCRIPTION 2");
+                    this.state.caller.setRemoteDescription(new RTCSessionDescription(answer.sdp));
+                }
+                // alert(document.getElementById("remoteView").)
+            }.bind(this);
+            chan.bind("client-answer",function(answer){
+                d(answer);
+                // console.log("client-answer");
+                // if(answer.room == this.state.room){
+                // console.log("answer received");
+                // this.state.caller.setRemoteDescription(new RTCSessionDescription(answer.sdp));
+                // }
+            });
+            chan.bind("client-reject",function(ans){
+                console.log("client-reject");
+                if(ans.room == this.state.room){
+                    console.log("Call declined");
+                    alert("Call to "+ans.rejected+" was politely declined");
+                    this.endCall();
+                }
+            });
+            chan.bind("client-endcall",function(ans){
+                console.log("client-endcall");
+                if(ans.room = this.state.room){
+                    console.log("Call ended");
+                    this.endCall();
+                }
+            })
+
+            this.setState({channel:chan});
+
+            let call = new window.RTCPeerConnection()
+
+            // this.setState({caller:new window.RTCPeerConnection()});
+
+            // alert("WE ARE PREPAERING CALLER");
+            call.onicecandidate = function(evt){
+                if(!evt.candidate) return;
+                console.log("onicecandidate called");
+                this.onIceCandidate(this.state.caller,evt);
+            }.bind(this);
+
+            //_______________________________________________________________________________________PROBLEM IS HERE NOT RUNNING WHEN STREAM ADDED
+            call.onaddstream = function(evt){
+                // alert("STREAM BEING ADDED");
+                // alert(evt.stream);
+                console.log("onaddstream called");
+                const video = document.getElementById("remoteView");
                 const vendorURL = window.URL || window.webkitURL;
                 if ("srcObject" in video) {
-                    video.srcObject = stream;
+                video.srcObject = evt.stream;
                 } else {
-                    video.src = window.URL.createObjectURL(stream);
+                video.src = window.URL.createObjectURL(evt.stream);
                 }
                 video.play();
-                this.state.caller.addStream(stream);
-                var sessDesc = new RTCSessionDescription(msg.sdp);
-                this.setState({sessionDesc:sessDesc});
-                this.state.caller.setRemoteDescription(sessDesc);
-                let c = function(sdp){
-                    this.state.caller.setLocalDescription(new RTCSessionDescription(sdp));
-                    this.state.channel.trigger("client-answer",{
-                        "sdp":sdp,
-                        "room":this.state.room
-                    });
-                }.bind(this);
-                this.state.caller.createAnswer().then(function(sdp){
-                    c(sdp)
-                    // this.state.caller.setLocalDescription(new RTCSessionDescription(sdp));
-                    // this.state.channel.trigger("client-answer",{
-                    // "sdp":sdp,
-                    // "room":this.state.room
-                    // });
-                });
-                }.bind(this);
-                this.getCam().then(stream => {
-                    b(stream);
-                    // this.setState({localUserMedia:stream});
-                    // const video = document.getElementById("selfView");
-                    // const vendorURL = window.URL || window.webkitURL;
-                    // if ("srcObject" in video) {
-                    // video.srcObject = stream;
-                    // } else {
-                    // video.src = window.URL.createObjectURL(stream);
-                    // }
-                    // video.play();
-                    // this.state.caller.addStream(stream);
-                    // var sessDesc = new RTCSessionDescription(msg.sdp);
-                    // this.setState({sessionDesc:sessDesc});
-                    // this.state.caller.setRemoteDescription(sessDesc);
-                    // this.state.caller.createAnswer().then(function(sdp){
-                    // this.state.caller.setLocalDescription(new RTCSessionDescription(sdp));
-                    // this.state.channel.trigger("client-answer",{
-                    // "sdp":sdp,
-                    // "room":this.state.room
-                    // });
-                    // });
+            }.bind(this)
 
-                })
-                .catch(error=>{
-                    console.log("an error occured", error);
-                })
-            }
-        }.bind(this);
-        chan.bind("client-sdp", function(msg){
-            a(msg);
-        // console.log("client-sdp");
-        // if(msg.room == this.state.id){
-        // console.log("sdp received");
-        // // var ans = confirm("You have a call from: "+msg.from+" Would you like to answer?");
-        // var ans = true;
-        // if(!ans){
-        // return this.state.channel.trigger("client-reject",{"room":msg.room,"reject":this.state.id})
-        // }
-        // this.setState({room:msg.room});
-        // var stream = this.state.localUserMedia;
-        // this.getCam().then(stream => {
-        // this.setState({localUserMedia:stream});
-        // const video = document.getElementById("selfView");
-        // const vendorURL = window.URL || window.webkitURL;
-        // if ("srcObject" in video) {
-        // video.srcObject = stream;
-        // } else {
-        // video.src = window.URL.createObjectURL(stream);
-        // }
-        // video.play();
-        // this.state.caller.addStream(stream);
-        // var sessDesc = new RTCSessionDescription(msg.sdp);
-        // this.setState({sessionDesc:sessDesc});
-        // this.state.caller.setRemoteDescription(sessDesc);
-        // this.state.caller.createAnswer().then(function(sdp){
-        // this.state.caller.setLocalDescription(new RTCSessionDescription(sdp));
-        // this.state.channel.trigger("client-answer",{
-        // "sdp":sdp,
-        // "room":this.state.room
-        // });
-        // });
+            this.setState({caller:call});
 
-        // })
-        // .catch(error=>{
-        // console.log("an error occured", error);
-        // })
-        // }
-        });
+            this.GetRTCPeerConnection();
+            this.GetRTCSessionDescription();
+            this.GetRTCIceCandidate();
+            // this.prepareCaller();
 
-        let d = function(answer){
-            console.log("client-answer");
-            if(answer.room == this.state.room){
-                console.log("answer received");
-                this.state.caller.setRemoteDescription(new RTCSessionDescription(answer.sdp));
-            }
-            // alert(document.getElementById("remoteView").)
-        }.bind(this);
-        chan.bind("client-answer",function(answer){
-            d(answer);
-            // console.log("client-answer");
-            // if(answer.room == this.state.room){
-            // console.log("answer received");
-            // this.state.caller.setRemoteDescription(new RTCSessionDescription(answer.sdp));
-            // }
-        });
-        chan.bind("client-reject",function(ans){
-            console.log("client-reject");
-            if(ans.room == this.state.room){
-                console.log("Call declined");
-                alert("Call to "+ans.rejected+" was politely declined");
-                this.endCall();
-            }
-        });
-        chan.bind("client-endcall",function(ans){
-            console.log("client-endcall");
-            if(ans.room = this.state.room){
-                console.log("Call ended");
-                this.endCall();
-            }
-        })
-
-        this.setState({channel:chan});
-
-        let call = new window.RTCPeerConnection()
-
-        // this.setState({caller:new window.RTCPeerConnection()});
-
-        alert("WE ARE PREPAERING CALLER");
-        call.onicecandidate = function(evt){
-            if(!evt.candidate) return;
-            console.log("onicecandidate called");
-            this.onIceCandidate(this.state.caller,evt);
-        }.bind(this);
-
-        //_______________________________________________________________________________________PROBLEM IS HERE NOT RUNNING WHEN STREAM ADDED
-        call.onaddstream = function(evt){
-            alert("STREAM BEING ADDED");
-            alert(evt.stream);
-            console.log("onaddstream called");
-            const video = document.getElementById("remoteView");
-            const vendorURL = window.URL || window.webkitURL;
-            if ("srcObject" in video) {
-            video.srcObject = evt.stream;
-            } else {
-            video.src = window.URL.createObjectURL(evt.stream);
-            }
-            video.play();
-        }.bind(this)
-
-        this.setState({caller:call});
-
-        this.GetRTCPeerConnection();
-        this.GetRTCSessionDescription();
-        this.GetRTCIceCandidate();
-        // this.prepareCaller();
-
-        // this.GetRTCPeerConnection();
-        // this.GetRTCSessionDescription();
-        // this.GetRTCIceCandidate();
-        // this.prepareCaller();
-        // 
+            // this.GetRTCPeerConnection();
+            // this.GetRTCSessionDescription();
+            // this.GetRTCIceCandidate();
+            // this.prepareCaller();
+            // 
         }
     }
 
@@ -316,6 +319,7 @@ class TwoPersonChatStation extends React.Component{
 
     handleTextChange(e){
         this.setState({text: e.target.value});
+        alert("SENT MESSAGE");
     }
 
     handleSend(){
@@ -346,14 +350,14 @@ class TwoPersonChatStation extends React.Component{
     }
     prepareCaller(){
         // this.setState({caller:new window.RTCPeerConnection()});
-        alert("WE ARE PREPAERING CALLER");
+        // alert("WE ARE PREPAERING CALLER");
         this.state.caller.onicecandidate = function(evt){
         if(!evt.candidate) return;
             console.log("onicecandidate called");
             this.onIceCandidate(this.state.caller,evt);
         };
         this.state.caller.onaddstream = function(evt){
-            alert("STREAM BEING ADDED");
+            // alert("STREAM BEING ADDED");
             console.log("onaddstream called");
             const video = document.getElementById("remoteView");
             const vendorURL = window.URL || window.webkitURL;
@@ -383,7 +387,7 @@ class TwoPersonChatStation extends React.Component{
                 video.src = window.URL.createObjectURL(stream);
             }
             video.play();
-            alert("ADDING STREAM");
+            // alert("ADDING STREAM");
             this.state.caller.addStream(stream);
             let a = function(desc){
             this.state.caller.setLocalDescription(new RTCSessionDescription(desc));
@@ -443,9 +447,9 @@ class TwoPersonChatStation extends React.Component{
         const video = document.getElementById("selfView");
         const vendorURL = window.URL || window.webkitURL;
         if ("srcObject" in video) {
-        video.srcObject = stream;
+            video.srcObject = stream;
         } else {
-        video.src = window.URL.createObjectURL(stream);
+            video.src = window.URL.createObjectURL(stream);
         }
         video.play();
         // this.state.caller.addStream(stream);
@@ -460,7 +464,7 @@ class TwoPersonChatStation extends React.Component{
         // this.setState({room:this.props.chatId.match.params.id})
         // });
         }).catch((error) => {
-        console.log(error);
+            console.log(error);
         })
         // this.GetRTCPeerConnection();
         // this.GetRTCSessionDescription();
@@ -472,34 +476,34 @@ class TwoPersonChatStation extends React.Component{
     render(){
     return(
         <div className="background">
-        <NavBar menu={this.state.menu} />
-        <div className='centerwhite px-3 pt-0 container'>
-        <div className="TwoPersonChatStation">
-        <div className="contentBack mx-auto mb-4 p-2">
-        <div className="container">
-        <div className="row">
-        <div className="col-4">
-        <TwoVideoChat remoteView={this.state.remoteSrc} selfView={this.state.selfSrc}/>
-        <ButtonPanel startCam={this.turnOnCamera} stopCam={this.endCall}/>
-        </div>
-        <div className="col-8">
-        <TextMessageChat chats={this.state.chats} text={this.state.text} username={this.state.username} handleChange={this.handleTextChange} handleSend={this.handleSend}/>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        {this.state.showPopup ? 
-        <UserLoginPrompt
-        // name={this.state.nickname}
-        // password={this.state.inputPassword}
-        passOnChange={this.handleChangePass.bind(this)}
-        nameOnChange={this.handleChangeName.bind(this)}
-        closePopup={this.togglePopup.bind(this)}
-        />
-        : null
-        }
+            <NavBar menu={this.state.menu} />
+            <div className='centerwhite px-3 pt-0 container'>
+                <div className="TwoPersonChatStation">
+                    <div className="contentBack mx-auto mb-4 p-2">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-4">
+                                    <TwoVideoChat remoteView={this.state.remoteSrc} selfView={this.state.selfSrc}/>
+                                    <ButtonPanel startCam={this.turnOnCamera} stopCam={this.endCall}/>
+                                </div>
+                                <div className="col-8">
+                                    <TextMessageChat chats={this.state.chats} text={this.state.text} username={this.state.username} handleChange={this.handleTextChange} handleSend={this.handleSend}/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {this.state.showPopup ? 
+            <UserLoginPrompt
+            // name={this.state.nickname}
+            // password={this.state.inputPassword}
+            passOnChange={this.handleChangePass.bind(this)}
+            nameOnChange={this.handleChangeName.bind(this)}
+            closePopup={this.togglePopup.bind(this)}
+            />
+            : null
+            }
         </div>
         
         

@@ -11,7 +11,7 @@ export default({remoteView,selfView}) =>{
             </div>
             <div className="row">
                 <div className="col">
-                    <video className="" id="remoteView" src={remoteView}>Other Person Video</video>
+                    <video className="w-100" id="remoteView" src={remoteView}>Other Person Video</video>
                 </div>
             </div>
         </div>
