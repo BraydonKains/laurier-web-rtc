@@ -17,7 +17,7 @@ export default({chats,text,username,handleChange,handleSend}) =>{
         <div className="row h-10">
             <div className="col">
                 <div className="d-inline">
-                    <textarea id="userMessage" className="messageInput w-90 float-left" onChange={handleChange} onKeyDown={handleChange}>
+                    <textarea id="userMessage" value={text} className="messageInput w-90 float-left" onChange={handleChange} onKeyDown={handleChange}>
 
                     </textarea>
                     <button className="sendButton" onClick={handleSend}>Send</button>

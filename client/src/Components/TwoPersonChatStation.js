@@ -87,7 +87,7 @@ class TwoPersonChatStation extends React.Component{
             });
 
             chan.bind('message', data => {
-                alert("GOT MESSAGE");
+                //alert("GOT MESSAGE");
                 let chatEntry = data.username+": "+data.message;
                 this.setState({ chats: [...this.state.chats, chatEntry]});
                 console.log(this.state.chats);
@@ -150,7 +150,7 @@ class TwoPersonChatStation extends React.Component{
                         this.state.caller.addStream(stream);
                         var sessDesc = new RTCSessionDescription(msg.sdp);
                         this.setState({sessionDesc:sessDesc});
-                        alert("SETTING REMOTE DESCRIPTION 1")
+                        //alert("SETTING REMOTE DESCRIPTION 1")
                         this.state.caller.setRemoteDescription(sessDesc);
                         let c = function(sdp){
                             this.state.caller.setLocalDescription(new RTCSessionDescription(sdp));
@@ -242,7 +242,7 @@ class TwoPersonChatStation extends React.Component{
                 console.log("client-answer");
                 if(answer.room == this.state.room){
                     console.log("answer received");
-                    alert("Setting REMOTE DESCRIPTION 2");
+                    //alert("Setting REMOTE DESCRIPTION 2");
                     this.state.caller.setRemoteDescription(new RTCSessionDescription(answer.sdp));
                 }
                 // alert(document.getElementById("remoteView").)
@@ -259,7 +259,7 @@ class TwoPersonChatStation extends React.Component{
                 console.log("client-reject");
                 if(ans.room == this.state.room){
                     console.log("Call declined");
-                    alert("Call to "+ans.rejected+" was politely declined");
+                    //alert("Call to "+ans.rejected+" was politely declined");
                     this.endCall();
                 }
             });
@@ -332,7 +332,7 @@ class TwoPersonChatStation extends React.Component{
 
     handleTextChange(e){
         this.setState({text: e.target.value});
-        alert("SENT MESSAGE");
+        //alert("SENT MESSAGE");
     }
 
     handleSend(){
@@ -341,7 +341,7 @@ class TwoPersonChatStation extends React.Component{
             message:this.state.text,
         };
         axios.post(process.env.REACT_APP_API_URI+'pusher/message',{payload,room_id:this.state.room});
-
+	this.setState({text: ''});
     }
 
     

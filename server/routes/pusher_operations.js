@@ -13,7 +13,7 @@ const pusher = new Pusher({
 /* GET home page. */
 router.post('/message', function(req, res, next) {
   const payload = req.body.payload;
-  pusher.trigger(req.body.room_id, 'message', payload);
+  pusher.trigger('presence-' + req.body.room_id, 'message', payload);
   res.send(payload);
 });
 
