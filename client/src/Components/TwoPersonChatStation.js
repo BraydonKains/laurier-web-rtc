@@ -79,7 +79,7 @@ class TwoPersonChatStation extends React.Component{
 	    headers: {
 		'Content-Type': 'application/json',
 	    },
-	    body: JSON.stringify(room_data) 
+	    body: JSON.stringify(password_attempt) 
 	})
 	.then(res => res.json())
 	.then(res => {
