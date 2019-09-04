@@ -94,6 +94,7 @@ class TwoPersonChatStation extends React.Component{
 	    });
 	}
 	console.log('hi again');
+
         if(PASSWORD_CORRECT){
             let chan = this.state.pusher.subscribe("presence-" + this.state.room);
 
