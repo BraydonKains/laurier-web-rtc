@@ -60,8 +60,8 @@ class Room {
     async commit() {
 	var success = false;
 	try {
-	    const res = await pool.query("INSERT INTO rooms (owner_id, capacity, room_type, password, open, name) VALUES ($1, $2, $3, $4, $5, $6)", [this.owner_id, this.capacity, this.room_type, this.password, this.open, this.name]);
-	    success = "created";
+	    const res = await pool.query("INSERT INTO rooms (id, owner_id, capacity, room_type, password, open, name) VALUES (DEFAULT, $1, $2, $3, $4, $5, $6) RETURNING id", [this.owner_id, this.capacity, this.room_type, this.password, this.open, this.name]);
+	    this.id = res.rows[0].id; 
 	} catch(err) {
 	    console.log(err);
 	}

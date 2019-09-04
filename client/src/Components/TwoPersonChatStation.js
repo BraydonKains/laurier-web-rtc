@@ -29,7 +29,7 @@ class TwoPersonChatStation extends React.Component{
             localUserMedia:{},
             room:this.props.match.params.id,
 
-            showPopup: typeof this.props.location.state === "undefined",
+            showPopup:true,// typeof this.props.location.state === "undefined",
 
             text: '',
             username: typeof this.props.location.state !== "undefined" ? this.props.location.state.username : '',
@@ -58,36 +58,42 @@ class TwoPersonChatStation extends React.Component{
         this.handleChangeName = this.handleChangeName.bind(this);
         this.togglePopup = this.togglePopup.bind(this);
         
+	if(typeof this.props.location.state !== "undefined") {
+	    this.togglePopup();
+	}
     }
     
 
     togglePopup() {
+	console.log("hi");
         this.setState({
           showPopup: !this.state.showPopup
         });
-        var PASSWORD_CORRECT = false;
+        var PASSWORD_CORRECT = typeof this.props.location.state !== "undefined";
 
-	let password_attempt = {
-	    room_id: this.match.params.id,
-	    password: this.state.inputPassword
-	};
-	fetch(process.env.REACT_APP_API_URI + "rooms/create", {
-	    method: "POST",
-	    mode: "cors",
-	    cache: "no-cache",
-	    headers: {
-		'Content-Type': 'application/json',
-	    },
-	    body: JSON.stringify(password_attempt) 
-	})
-	.then(res => res.json())
-	.then(res => {
-	    PASSWORD_CORRECT = true;
-	})
-	.catch(err => {
-	    console.log(err);
-	});
-
+	if(!PASSWORD_CORRECT) {
+	    let password_attempt = {
+		room_id: this.match.params.id,
+		password: this.state.inputPassword
+	    };
+	    fetch(process.env.REACT_APP_API_URI + "rooms/create", {
+		method: "POST",
+		mode: "cors",
+		cache: "no-cache",
+		headers: {
+		    'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(password_attempt) 
+	    })
+	    .then(res => res.json())
+	    .then(res => {
+		PASSWORD_CORRECT = true;
+	    })
+	    .catch(err => {
+		console.log(err);
+	    });
+	}
+	console.log('hi again');
         if(PASSWORD_CORRECT){
             let chan = this.state.pusher.subscribe("presence-" + this.state.room);
 
@@ -369,6 +375,7 @@ class TwoPersonChatStation extends React.Component{
 
 
     render(){
+	console.log('render');
         return(
             <div className="background">
                 <NavBar menu={this.state.menu} />

@@ -45,6 +45,7 @@ class HomePage extends React.Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
       this.handleRoomChange = this.handleRoomChange.bind(this);
       this.handleTypeChange = this.handleTypeChange.bind(this);
+      this.createRoom = this.createRoom.bind(this);
   }
 
   openModal() {
@@ -65,7 +66,7 @@ class HomePage extends React.Component {
 
     createRoom() {
 	this.closeModal();
-
+	console.log(this.props.location.user_id);
 	let room_data = {
 	    name: this.state.roomVal,
 	    password: this.state.passwordVal,
@@ -83,7 +84,8 @@ class HomePage extends React.Component {
 	})
 	.then(res => res.json())
 	.then(res => {
-	    this.setState({new_room_id: res.room_id, redirect: true});
+	    console.log(res);
+	    this.setState({new_room_id: res.id, redirect: true});
 	})
 	.catch(err => {
 	    console.log(err);
@@ -158,11 +160,9 @@ class HomePage extends React.Component {
                   <div className="col-2"> </div>
                   <div className="col-8 ml-3"><input type="radio" name="roomType" checked={this.state.typeVal == "1"} value="1" className="mr-2" onChange={this.handleTypeChange}/>One to Multiple Session</div>
                 </div>
-                <Link to="/twopersonchat">
-                  <button onClick={this.createRoom}>
-                    Create Room
-                  </button>
-                </Link>
+		  <button onClick={this.createRoom}>
+		    Create Room
+		  </button>
               </div>            
             </Modal>
 

@@ -34,7 +34,7 @@ exports.user_index = async function(_user_id) {
 	for(i=0; i<res.rows.length; i++) {
 	    let r = new Room();
 	    r.id = res.rows[i].id;
-	    r.owner_id = res.rows[i].username;
+	    r.owner_id = res.rows[i].owner_id;
 	    r.capacity = res.rows[i].capacity;
 	    r.open = res.rows[i].open;
 	    r.name = res.rows[i].name;
@@ -65,12 +65,11 @@ exports.create = async function(_room, _user_id) {
 	const hash = await bcrypt.hash(_room.password, 10);
 	r.password = hash;
 	let result = await r.commit();
-	return result;
+	return r;
     } catch(err) {
 	if(err) throw err;
 	return false;
     }
-    return true;
 }
 
 exports.subscribe = async function(_room_id, _password) {
