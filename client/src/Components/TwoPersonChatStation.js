@@ -14,7 +14,7 @@ class TwoPersonChatStation extends React.Component{
         super(props);
         Pusher.logToConsole = true;
         this.state = {
-        pusher: new Pusher('ba473cb312963eb9be6a', {
+        pusher: new Pusher(process.env.REACT_APP_PUSHER_KEY, {
             cluster: 'us2',
             forceTLS: true,
             authEndpoint: process.env.REACT_APP_API_URI+"pusher/auth"
