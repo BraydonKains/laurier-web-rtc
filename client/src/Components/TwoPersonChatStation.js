@@ -151,7 +151,7 @@ class TwoPersonChatStation extends React.Component{
                         var sessDesc = new RTCSessionDescription(msg.sdp);
                         this.setState({sessionDesc:sessDesc});
                         //alert("SETTING REMOTE DESCRIPTION 1")
-                        this.state.caller.setRemoteDescription(sessDesc);
+                        this.state.caller.setRemoteDescription(sessDesc)
                         let c = function(sdp){
                             this.state.caller.setLocalDescription(new RTCSessionDescription(sdp));
                             this.state.channel.trigger("client-answer",{
@@ -390,7 +390,7 @@ class TwoPersonChatStation extends React.Component{
     getCam(){
         return navigator.mediaDevices.getUserMedia({
             video:true,
-            audio:false
+            audio:true
         });
     }
     callUser(user){
