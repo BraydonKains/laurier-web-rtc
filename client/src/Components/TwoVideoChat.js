@@ -6,7 +6,7 @@ export default({remoteView,selfView}) =>{
         <div className="container w-100">
             <div className="row">
                 <div className="col">
-                    <video className="w-100" id="selfView" src={selfView}>Your Video</video>
+                    <video className="w-100" id="selfView" src={selfView} muted="true">Your Video</video>
                 </div>
             </div>
             <div className="row">
